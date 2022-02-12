@@ -1,0 +1,43 @@
+h1,
+p {
+  font-family: Lato;
+}
+
+.guessContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.guessRow {
+  display: flex;
+  flex-direction: row;
+
+  margin: 0.5rem;
+}
+
+.charGuess {
+  display: grid;
+  place-content: center;
+  padding: 1rem;
+  margin: 0 0.25rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: white;
+  background-color: black;
+  font-family: Arial, Helvetica, sans-serif;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.guess-correct {
+  background-color: green;
+}
+
+.guess-wrong_position {
+  background-color: goldenrod;
+}
+
+.guess-not_in_word {
+  background-color: gray;
+}
