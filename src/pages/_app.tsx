@@ -1,14 +1,23 @@
 import { ChakraProvider } from "@chakra-ui/react";
+import Head from "next/head";
 import "./style.css";
 
 import theme from "../theme";
 import { AppProps } from "next/app";
+import { MainLayout } from "../layout/MainLayout";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ChakraProvider resetCSS theme={theme}>
-      <Component {...pageProps} />
-    </ChakraProvider>
+    <>
+      <Head>
+        <title>Chakra UI Dashboard</title>
+      </Head>
+      <ChakraProvider resetCSS theme={theme}>
+        <MainLayout>
+          <Component {...pageProps} />
+        </MainLayout>
+      </ChakraProvider>
+    </>
   );
 }
 
