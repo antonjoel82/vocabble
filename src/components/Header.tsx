@@ -15,7 +15,7 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
-      px=""
+      px={4}
       position="sticky"
       top="0"
       height="20"

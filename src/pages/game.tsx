@@ -6,9 +6,5 @@ const DEFAULT_WORDLE_GAME_PROPS: WordleGameProps = {
 };
 
 export default () => {
-  return (
-    <main>
-      <WordleGame {...DEFAULT_WORDLE_GAME_PROPS} />
-    </main>
-  );
+  return <WordleGame {...DEFAULT_WORDLE_GAME_PROPS} />;
 };

@@ -1,20 +1,21 @@
-import * as React from 'react';
-import { CharGuessResult } from '../index';
-import { CharSquare } from './CharSquare';
+import * as React from "react";
+import { CharSquare } from "./CharSquare";
+import { CharGuessResult } from "./WordleGame";
+import { Flex } from "@chakra-ui/react";
 
 interface GuessRowProps {
-  guessResults: CharGuessResult[];
+  guessResults: Partial<CharGuessResult>[];
 }
 
 export const GuessRow: React.FC<GuessRowProps> = ({ guessResults }) => {
   return (
-    <div className="guessRow">
+    <Flex gap={2}>
       {guessResults.map((guessResult, charIndex) => (
         <CharSquare
           key={`${guessResult.char}-${guessResult.status}-${charIndex}`}
           guessResult={guessResult}
         />
       ))}
-    </div>
+    </Flex>
   );
 };

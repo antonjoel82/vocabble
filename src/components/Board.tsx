@@ -10,7 +10,7 @@ export interface BoardProps {
 
 export const Board: React.FC<BoardProps> = ({ boardData }) => {
   return (
-    <Flex dir="column" className="guessContainer">
+    <Flex direction="column" rowGap={2}>
       {boardData.map((guessResults, guessIndex) => (
         <GuessRow key={`guess-${guessIndex}`} guessResults={guessResults} />
       ))}

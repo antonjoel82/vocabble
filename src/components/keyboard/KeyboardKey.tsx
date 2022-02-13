@@ -33,23 +33,30 @@ const getColorsFromStatus = (
 
 // TODO use theme, and change font size for desktop
 const KeyboardButton = styled(Button)<ButtonProps & { status: KeyStatus }>(
-  ({ theme, status }) => {
+  ({ status }) => {
     const { bgColor, fontColor } = getColorsFromStatus(status);
     return `
-      display: grid;
-      place-items: center;
-      min-width: 10px !important;
-      font-family: monospace;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-family: sans-serif;
       font-weight: bold;
       border-radius: 4px;
+      padding-inline-start: 0;
+      padding-inline-end: 0;
+
+      min-width: 30px;
+      padding: 1rem 0.6rem;
 
       text-transform: uppercase;
       background-color: ${bgColor};
       color: ${fontColor};
-      font-size: 0.8rem;
+      font-size: 1rem;
     `;
   }
 );
+// width: 2rem;
+// height: 1.5rem;
 // padding-left: 0.5rem;
 // padding-right: 0.5rem;
 

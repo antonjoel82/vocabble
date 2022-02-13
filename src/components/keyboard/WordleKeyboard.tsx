@@ -25,7 +25,7 @@ export const WordleKeyboard: React.FC<WordleKeyboardProps> = ({
   canBackspace,
 }) => {
   const backspaceKeyConfig: KeyboardKeyProps = {
-    label: <FiDelete />,
+    label: <FiDelete size="1.5rem" />,
     status: "default",
     handleClick: handleBackspace,
     isDisabled: !canBackspace,
@@ -47,7 +47,7 @@ export const WordleKeyboard: React.FC<WordleKeyboardProps> = ({
       width="100%"
       py={3}
     >
-      <Flex justifyContent="center" direction="column" rowGap={3}>
+      <Flex justifyContent="center" direction="column" rowGap={2}>
         {KEYBOARD_CHARS.map((charRow, rowIndex) => {
           const keyConfigs: KeyboardKeyProps[] = charRow.map((char) => ({
             label: char,
@@ -64,7 +64,12 @@ export const WordleKeyboard: React.FC<WordleKeyboardProps> = ({
             keyConfigs.push(enterKeyConfig); // add on right: ;
           }
 
-          return <KeyboardRow keyConfigs={keyConfigs} />;
+          return (
+            <KeyboardRow
+              key={`keyboard-row-${rowIndex}`}
+              keyConfigs={keyConfigs}
+            />
+          );
         })}
       </Flex>
     </Container>

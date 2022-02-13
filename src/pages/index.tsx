@@ -1,23 +1,19 @@
-import {
-  Link as ChakraLink,
-  Text,
-  Code,
-  List,
-  ListIcon,
-  ListItem,
-} from "@chakra-ui/react";
+import { WordleGame, WordleGameProps } from "../components/WordleGame";
 
-import { Hero } from "../components/Hero";
-import { Container } from "../components/Container";
-import { Main } from "../components/Main";
+const DEFAULT_WORDLE_GAME_PROPS: WordleGameProps = {
+  guessLimit: 6,
+  wordLength: 5,
+};
 
-const Index = () => (
-  <Container height="100vh">
-    <Hero title="Worrdle" />
-    <Main>
-      <Text>Messing with word games</Text>
-    </Main>
-  </Container>
-);
+export default () => {
+  return <WordleGame {...DEFAULT_WORDLE_GAME_PROPS} />;
+};
 
-export default Index;
+// const Index = () => (
+//   <Container height="100vh">
+//     <Hero title="Worrdle" />
+//     <Main>
+//       <Text>Messing with word games</Text>
+//     </Main>
+//   </Container>
+// );
