@@ -46,14 +46,22 @@ export const WordleGame: React.FC<WordleGameProps> = ({
 
   const [keyStatusMap, setKeyStatusMap] = React.useState<KeyStatusMap>({});
 
-  const handleMount = () => {
+  const fetchTargetWord = () => {
     const target = getRandomWordOfLength(wordLength);
     setTargetWord(target.toLocaleLowerCase());
   };
 
+  const resetGame = () => {
+    fetchTargetWord();
+    setCurrentGuessCount(0);
+    setGameState("active");
+    setBoard(getEmptyBoard(guessLimit, wordLength));
+    setKeyStatusMap({});
+  };
+
   React.useEffect(() => {
-    handleMount();
-  }, []);
+    resetGame();
+  }, [guessLimit, wordLength]);
 
   const getCurrentGuess = () => {
     if (currentGuessCount >= guessLimit) {
@@ -112,14 +120,6 @@ export const WordleGame: React.FC<WordleGameProps> = ({
     setBoard(updatedBoard);
   };
 
-  const resetGame = () => {
-    handleMount();
-    setCurrentGuessCount(0);
-    setGameState("active");
-    setBoard(getEmptyBoard(guessLimit, wordLength));
-    setKeyStatusMap({});
-  };
-
   const submitGuess = (guess: string) => {
     const guessResults = evaluateGuessV2(guess, targetWord);
 
@@ -168,7 +168,7 @@ export const WordleGame: React.FC<WordleGameProps> = ({
   }, [currentGuessCount]);
 
   return (
-    <Container overflow="scroll" background="none">
+    <Container overflow="scroll" background="none" p="4">
       {/* allow scrolling to bottom */}
       <Box mb={"160px"}>
         <Board boardData={board} />

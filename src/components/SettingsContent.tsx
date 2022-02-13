@@ -1,17 +1,16 @@
 import React from "react";
-import { Text, Flex, Heading, Box, BoxProps } from "@chakra-ui/react";
-import { Container } from "../components/Container";
+import { Text, Flex, Box } from "@chakra-ui/react";
 import { DarkModeSwitch } from "../components/DarkModeSwitch";
 import { NumberSlider } from "../components/Slider";
 import styled from "@emotion/styled";
+import {
+  MIN_WORD_LENGTH,
+  MAX_WORD_LENGTH,
+  MIN_GUESS_LIMIT,
+  MAX_GUESS_LIMIT,
+} from "../config/wordle";
 
 interface SettingsContentProps {}
-
-export const MIN_GUESS_LIMIT = 1;
-export const MAX_GUESS_LIMIT = 10;
-
-export const MIN_WORD_LENGTH = 2;
-export const MAX_WORD_LENGTH = 28;
 
 const NumberBox = styled(Box)(
   ({ theme }) => `

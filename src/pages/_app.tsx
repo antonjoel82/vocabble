@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Chakra UI Dashboard</title>
+        <title>Vocabble</title>
       </Head>
       <ChakraProvider resetCSS theme={theme}>
         <MainLayout>
