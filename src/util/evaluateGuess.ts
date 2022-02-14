@@ -21,9 +21,9 @@ export const evaluateGuessV2 = (
   guess: string,
   targetWord: string
 ): WordleGuessResult[] => {
-  const results: WordleGuessResult[] = [];
+  const results: WordleGuessResult[] = []; //Array(guess.length).fill({});
 
-  console.log("Evaluating", { guess, targetWord });
+  // console.log("Evaluating", { guess, targetWord });
 
   if (guess.length !== targetWord.length) {
     throw new Error("Invalid word length!");
@@ -34,7 +34,15 @@ export const evaluateGuessV2 = (
 
   const usedGuesses: Record<string, number> = {};
 
-  console.log("Lookups: guess, target", guessLookup, targetLookup);
+  // console.log("Lookups: guess, target", guessLookup, targetLookup);
+
+  guess.split("").forEach((guessChar, guessCharIndex) => {
+    // current letter has a match in the same position
+    if (guessChar === targetWord.charAt(guessCharIndex)) {
+      // result.status = "correct";
+      usedGuesses[guessChar] = (usedGuesses[guessChar] ?? 0) + 1;
+    }
+  });
 
   guess.split("").forEach((guessChar, guessCharIndex) => {
     const result: WordleGuessResult = {

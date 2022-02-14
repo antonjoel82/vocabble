@@ -7,7 +7,7 @@ import { Sidebar } from "../components/Sidebar";
 
 const LINK_ITEMS: NavLinkData[] = [
   { label: "Home", icon: FiHome, href: "/" },
-  { label: "Standard Game", icon: FiThumbsUp, href: "/game" },
+  { label: "Standard Game", icon: FiThumbsUp, href: "/standard" },
   // { label: "Settings", icon: FiSettings, href: "/settings" },
 ];
 

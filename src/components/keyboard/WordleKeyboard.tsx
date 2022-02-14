@@ -1,5 +1,7 @@
 import { Flex } from "@chakra-ui/react";
+import React from "react";
 import { FiDelete } from "react-icons/fi";
+import { KeyboardBaseProps } from "../../types";
 
 import { Container } from "../Container";
 import { CharGuessStatus } from "../WordleGame";
@@ -7,13 +9,8 @@ import { KEYBOARD_CHARS } from "./ constants";
 import { KeyboardKeyProps } from "./KeyboardKey";
 import { KeyboardRow } from "./KeyboardRow";
 
-export interface WordleKeyboardProps {
+export interface WordleKeyboardProps extends KeyboardBaseProps {
   keyStatusMap: { [keyChar: string]: CharGuessStatus };
-  handleAddChar: (char: string) => void;
-  handleSubmit: () => void;
-  handleBackspace: () => void;
-  canSubmit: boolean;
-  canBackspace: boolean;
 }
 
 export const WordleKeyboard: React.FC<WordleKeyboardProps> = ({

@@ -52,6 +52,8 @@ export const WordleGame: React.FC<WordleGameProps> = ({
   };
 
   const resetGame = () => {
+    // console.log("resetGame");
+
     fetchTargetWord();
     setCurrentGuessCount(0);
     setGameState("active");
@@ -74,7 +76,12 @@ export const WordleGame: React.FC<WordleGameProps> = ({
       .trim();
   };
 
+  // React.useEffect(() => {
+  //   console.log("Board changed", board);
+  // }, [board]);
+
   const handleAddChar = (char: string) => {
+    // console.log("handleAddChar", char, board);
     if (currentGuessCount >= guessLimit) {
       console.warn("You've already exceeded the allowed number of guesses");
       return;
@@ -93,7 +100,7 @@ export const WordleGame: React.FC<WordleGameProps> = ({
       return;
     }
 
-    console.log({ rowBeingUpdated, emptyIndex });
+    // console.log({ rowBeingUpdated, emptyIndex });
 
     const updatedBoard = produce(board, (draft) => {
       draft[currentGuessCount][emptyIndex].char = char;
@@ -125,7 +132,7 @@ export const WordleGame: React.FC<WordleGameProps> = ({
 
     setCurrentGuessCount((curGuessCount) => curGuessCount + 1);
 
-    console.log("Evaluated result", { guess, targetWord, guessResults });
+    // console.logs("Evaluated result", { guess, targetWord, guessResults });
 
     // Update the board state
     const updatedBoard = produce(board, (draft) => {
@@ -141,6 +148,9 @@ export const WordleGame: React.FC<WordleGameProps> = ({
         draft[char] =
           previousKeyStatus === "correct" || status === "correct"
             ? "correct"
+            : previousKeyStatus === "wrong_position" ||
+              status === "wrong_position"
+            ? "wrong_position"
             : status;
       }
     });
@@ -153,6 +163,8 @@ export const WordleGame: React.FC<WordleGameProps> = ({
 
   const handleSubmit = () => {
     const guess = getCurrentGuess();
+
+    // console.log("handleSubmit", { guess });
     if (guess.length !== wordLength) {
       alert(`You may only guess words of length ${wordLength}`);
       return;
@@ -166,6 +178,15 @@ export const WordleGame: React.FC<WordleGameProps> = ({
       setGameState("fail");
     }
   }, [currentGuessCount]);
+
+  // useDeviceKeyboard({
+  //   handleAddChar,
+  //   handleBackspace: handleRemoveLastChar,
+  //   handleSubmit,
+  //   canBackspace: getCurrentGuess().length > 0 || gameState !== "active",
+  //   canSubmit:
+  //     getCurrentGuess().length === wordLength || gameState !== "active",
+  // });
 
   return (
     <Container overflow="scroll" background="none" p="4">

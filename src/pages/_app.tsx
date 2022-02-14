@@ -3,13 +3,13 @@ import Head from "next/head";
 
 import theme from "../theme";
 import { AppProps } from "next/app";
-import { MainLayout } from "../layout/MainLayout";
+import { APP_NAME, MainLayout } from "../layout/MainLayout";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Vocabble</title>
+        <title>{APP_NAME}</title>
       </Head>
       <ChakraProvider resetCSS theme={theme}>
         <MainLayout>

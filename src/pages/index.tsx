@@ -25,7 +25,6 @@ export default () => {
     +guesses >= MIN_GUESS_LIMIT &&
     +guesses <= MAX_GUESS_LIMIT
   ) {
-    console.log("Setting guesses to " + guesses);
     wordleProps.guessLimit = +guesses;
   }
 
@@ -37,20 +36,8 @@ export default () => {
     +length >= MIN_WORD_LENGTH &&
     +length <= MAX_WORD_LENGTH
   ) {
-    console.log("Setting wordlength to " + length);
     wordleProps.wordLength = +length;
   }
 
-  console.log("Wordle Props", wordleProps);
-
   return <WordleGame {...wordleProps} />;
 };
-
-// const Index = () => (
-//   <Container height="100vh">
-//     <Hero title="Worrdle" />
-//     <Main>
-//       <Text>Messing with word games</Text>
-//     </Main>
-//   </Container>
-// );

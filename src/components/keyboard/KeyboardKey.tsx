@@ -55,10 +55,6 @@ const KeyboardButton = styled(Button)<ButtonProps & { status: KeyStatus }>(
     `;
   }
 );
-// width: 2rem;
-// height: 1.5rem;
-// padding-left: 0.5rem;
-// padding-right: 0.5rem;
 
 export interface KeyboardKeyProps {
   label: string | JSX.Element;
@@ -74,7 +70,14 @@ export const KeyboardKey: React.FC<KeyboardKeyProps> = ({
   isDisabled,
 }) => {
   return (
-    <KeyboardButton status={status} onClick={handleClick} disabled={isDisabled}>
+    <KeyboardButton
+      status={status}
+      onClick={handleClick}
+      disabled={isDisabled}
+      //prevent weird buttons styling after press
+      _focus={{}}
+      _active={{}}
+    >
       {label}
     </KeyboardButton>
   );
