@@ -57,8 +57,8 @@ export const WordleKeyboard: React.FC<WordleKeyboardProps> = ({
 
           // for the bottom row of the keyboard, add control buttons
           if (rowIndex === KEYBOARD_CHARS.length - 1) {
-            keyConfigs.unshift(backspaceKeyConfig); // add on left
-            keyConfigs.push(enterKeyConfig); // add on right: ;
+            keyConfigs.unshift(enterKeyConfig); // add on left
+            keyConfigs.push(backspaceKeyConfig); // add on right: ;
           }
 
           return (
