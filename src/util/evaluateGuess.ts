@@ -29,9 +29,10 @@ export const evaluateGuessV2 = (
     throw new Error("Invalid word length!");
   }
 
-  const guessLookup = wordToLetterLookup(guess);
+  // map each character to a list of the indices at which it appears
   const targetLookup = wordToLetterLookup(targetWord);
 
+  // track the number of used guesses for a given character
   const usedGuesses: Record<string, number> = {};
 
   // console.log("Lookups: guess, target", guessLookup, targetLookup);
@@ -59,7 +60,7 @@ export const evaluateGuessV2 = (
     } else if (
       // there's at least one match but ensure we don't signal a phantom extra character
       matchingIndices.length > 0 &&
-      (usedGuesses[guessChar] ?? 0) < matchingIndices.length
+      (usedGuesses[guessChar] ?? 0) <= matchingIndices.length
     ) {
       result.status = "wrong_position";
       usedGuesses[guessChar] = (usedGuesses[guessChar] ?? 0) + 1;

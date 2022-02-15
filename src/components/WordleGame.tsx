@@ -6,9 +6,13 @@ import { Container } from "./Container";
 import { WordleKeyboard } from "./keyboard/WordleKeyboard";
 import { validateChar } from "../util/validateChar";
 import produce from "immer";
-import { Flex, Button, Heading, Box } from "@chakra-ui/react";
+import { Box, useClipboard, useDisclosure } from "@chakra-ui/react";
+import { convertGameResultToString } from "../util";
+import { GameOverModal } from "./GameOverModal";
+import { GameOverActionBar } from "./GameOverActionBar";
 
 export type CharGuessStatus = "correct" | "wrong_position" | "not_in_word";
+export type GameState = "active" | "fail" | "win";
 
 export interface CharGuessResult {
   status: CharGuessStatus;
@@ -37,17 +41,21 @@ export const WordleGame: React.FC<WordleGameProps> = ({
 }) => {
   const [targetWord, setTargetWord] = React.useState<string>("");
   const [currentGuessCount, setCurrentGuessCount] = React.useState<number>(0);
-  const [gameState, setGameState] = React.useState<"active" | "fail" | "win">(
-    "active"
-  );
+  const [gameState, setGameState] = React.useState<GameState>("active");
   const [board, setBoard] = React.useState<BoardResults>(
     getEmptyBoard(guessLimit, wordLength)
   );
-
   const [keyStatusMap, setKeyStatusMap] = React.useState<KeyStatusMap>({});
+
+  const {
+    isOpen: isGameOverModalOpen,
+    onClose: closeGameOverModal,
+    onOpen: openGameOverModal,
+  } = useDisclosure();
 
   const fetchTargetWord = () => {
     const target = getRandomWordOfLength(wordLength);
+    // console.log("Target word: ", target);
     setTargetWord(target.toLocaleLowerCase());
   };
 
@@ -179,6 +187,12 @@ export const WordleGame: React.FC<WordleGameProps> = ({
     }
   }, [currentGuessCount]);
 
+  React.useEffect(() => {
+    if (gameState !== "active") {
+      openGameOverModal();
+    }
+  }, [gameState]);
+
   // useDeviceKeyboard({
   //   handleAddChar,
   //   handleBackspace: handleRemoveLastChar,
@@ -188,48 +202,51 @@ export const WordleGame: React.FC<WordleGameProps> = ({
   //     getCurrentGuess().length === wordLength || gameState !== "active",
   // });
 
+  const { onCopy } = useClipboard(convertGameResultToString(board));
+
+  const handleShareClick = () => {
+    onCopy();
+  };
+
+  const handleResetClick = () => {
+    resetGame();
+    closeGameOverModal();
+  };
+
   return (
-    <Container overflow="scroll" background="none" p="4">
-      {/* allow scrolling to bottom */}
-      <Box mb={"160px"}>
-        <Board boardData={board} />
-        {gameState !== "active" && (
-          <Flex
-            direction="column"
-            justifyContent="center"
-            textAlign="center"
-            my={3}
-            px={20}
-            rowGap={3}
-          >
-            <Heading size="md">
-              {gameState === "win"
-                ? "You win!"
-                : `For real bro? The word was ${targetWord.toLocaleUpperCase()}`}
-            </Heading>
-            <Button
-              background="green.200"
-              onClick={resetGame}
-              py={5}
-              fontWeight="bold"
-              color="green"
-              border="2px solid green"
-            >
-              Play again!
-            </Button>
-          </Flex>
-        )}
-      </Box>
-      <WordleKeyboard
-        keyStatusMap={keyStatusMap}
-        canBackspace={getCurrentGuess().length > 0 || gameState !== "active"}
-        canSubmit={
-          getCurrentGuess().length === wordLength || gameState !== "active"
-        }
-        handleAddChar={handleAddChar}
-        handleBackspace={handleRemoveLastChar}
-        handleSubmit={handleSubmit}
+    <>
+      <Container overflow="scroll" background="none" pt={4} px={4}>
+        {/* allow scrolling to bottom */}
+        <Box pb={`160px`}>
+          <Board boardData={board} />
+          {gameState !== "active" && (
+            <Box mt={4}>
+              <GameOverActionBar
+                handlePrimaryClick={handleShareClick}
+                handleSecondaryClick={handleResetClick}
+              />
+            </Box>
+          )}
+        </Box>
+        <WordleKeyboard
+          keyStatusMap={keyStatusMap}
+          canBackspace={getCurrentGuess().length > 0 || gameState !== "active"}
+          canSubmit={
+            getCurrentGuess().length === wordLength || gameState !== "active"
+          }
+          handleAddChar={handleAddChar}
+          handleBackspace={handleRemoveLastChar}
+          handleSubmit={handleSubmit}
+        />
+      </Container>
+      <GameOverModal
+        isOpen={isGameOverModalOpen}
+        onClose={closeGameOverModal}
+        targetWord={targetWord}
+        isWin={gameState === "win"}
+        handlePrimaryClick={handleShareClick}
+        handleSecondaryClick={handleResetClick}
       />
-    </Container>
+    </>
   );
 };

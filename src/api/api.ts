@@ -1,4 +1,4 @@
-import { FULL_DICTIONARY } from './full-dictionary';
+import { FULL_DICTIONARY } from "./full-dictionary";
 
 export const getDictionaryForWordLength = (
   wordLength: number = 5
@@ -16,20 +16,11 @@ export const getDictionaryForWordLength = (
   );
 };
 
-export const getRandomWordFromWordList = (wordList: string[]): string => {
-  if (!wordList?.[0]) {
-    throw new Error('Word list is empty');
-  }
-
-  const randomIndex = Math.floor(Math.random() * wordList.length);
-  return wordList[randomIndex];
-};
-
 export const getRandomWordFromDictionary = (
   dictionary: Record<string, any>
 ): string => {
   if (!dictionary || !Object.keys(dictionary)) {
-    throw new Error('Word list is empty');
+    throw new Error("Word list is empty");
   }
 
   const words = Object.keys(dictionary);

@@ -5,7 +5,7 @@ import {
   MAX_WORD_LENGTH,
   MIN_GUESS_LIMIT,
   MAX_GUESS_LIMIT,
-} from "../config/wordle";
+} from "../config/wordleConstants";
 
 const DEFAULT_WORDLE_GAME_PROPS: WordleGameProps = {
   guessLimit: 6,
