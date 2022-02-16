@@ -14,12 +14,5 @@ declare module "node-fpe" {
 
   function fpe(config: FPEConfig): FPECipher;
 
-  export = {
-    fpe,
-    CharDomain,
-    Secret,
-    FPEConfig,
-    FPECipher,
-  };
+  export = fpe;
 }
-//const cipher = fpe({ secret: 'secret!', domain: ['A', 'B', 'C', 'D', 'E'] });

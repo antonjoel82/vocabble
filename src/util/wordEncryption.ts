@@ -8,7 +8,7 @@ const domain = ALPHABET_LOWER.concat(ALPHABET_LOWER.toLocaleUpperCase())
   .split("");
 
 const cipher = fpe({
-  secret: process.env.TARGET_WORD_FPE_SECRET ?? "t3248y23roh",
+  secret: process.env.TARGET_WORD_FPE_SECRET,
   domain,
 });
 

@@ -13,18 +13,18 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "typeRoots": ["./thirdPartyTypes", "./node_modules/@types"]
+    "typeRoots": ["./thirdPartyTypes", "./node_modules/@types"],
+    "baseUrl": ".",
+    "paths": {
+      "#root/*": ["/*"],
+      "#components/*": ["components/*"],
+      "#styles/*": ["styles/*"],
+      "#sections/*": ["sections/*"],
+      "#layout/*": ["layout/*"],
+      "#public/*": ["public/*"],
+      "#lib/*": ["lib/*"]
+    }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "thirdPartyTypes"],
-  "baseUrl": ".",
-  "paths": {
-    "#root/*": ["/*"],
-    "#components/*": ["components/*"],
-    "#styles/*": ["styles/*"],
-    "#sections/*": ["sections/*"],
-    "#layout/*": ["layout/*"],
-    "#public/*": ["public/*"],
-    "#lib/*": ["lib/*"]
-  }
+  "exclude": ["node_modules", "thirdPartyTypes"]
 }
