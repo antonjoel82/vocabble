@@ -1,10 +1,15 @@
-import FPE from "node-fpe";
+import fpe from "node-fpe";
 
-// const fpe = require('node-fpe');
-const cipher = FPE.fpe({
-  secret: process.env.TARGET_WORD_FPE_SECRET,
-  // domain is only lower-case letters
-  domain: "abcdefghijklmnopqrstuvwxyz".split(""),
+const ALPHABET_LOWER = "abcdefghijklmnopqrstuvwxyz";
+
+// domain is all alphanumerics
+const domain = ALPHABET_LOWER.concat(ALPHABET_LOWER.toLocaleUpperCase())
+  .concat("1234567890")
+  .split("");
+
+const cipher = fpe({
+  secret: process.env.TARGET_WORD_FPE_SECRET ?? "t3248y23roh",
+  domain,
 });
 
 export const encryptWord = (word: string) => cipher.encrypt(word);

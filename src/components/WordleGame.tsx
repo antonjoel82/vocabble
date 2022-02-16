@@ -55,14 +55,14 @@ export const WordleGame: React.FC<WordleGameProps> = ({
   } = useDisclosure();
 
   const boardString = React.useMemo(
-    () => convertGameResultToString(board),
-    [board]
+    () => convertGameResultToString(board, targetWord),
+    [board, targetWord]
   );
 
   const { onCopy } = useClipboard(boardString);
 
   const fetchTargetWord = () => {
-    const target = "rated"; //getRandomWordOfLength(wordLength);
+    const target = getRandomWordOfLength(wordLength);
     // console.log("Target word: ", target);
     setTargetWord(target.toLocaleLowerCase());
   };
