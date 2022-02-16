@@ -62,7 +62,7 @@ export const WordleGame: React.FC<WordleGameProps> = ({
   const { onCopy } = useClipboard(boardString);
 
   const fetchTargetWord = () => {
-    const target = getRandomWordOfLength(wordLength);
+    const target = "rated"; //getRandomWordOfLength(wordLength);
     // console.log("Target word: ", target);
     setTargetWord(target.toLocaleLowerCase());
   };
