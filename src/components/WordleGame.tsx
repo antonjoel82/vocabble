@@ -10,6 +10,7 @@ import { Box, useClipboard, useDisclosure } from "@chakra-ui/react";
 import { convertGameResultToString } from "../util";
 import { GameOverModal } from "./GameOverModal";
 import { GameOverActionBar } from "./GameOverActionBar";
+import { useCallback } from "react";
 
 export type CharGuessStatus = "correct" | "wrong_position" | "not_in_word";
 export type GameState = "active" | "fail" | "win";
@@ -53,13 +54,20 @@ export const WordleGame: React.FC<WordleGameProps> = ({
     onOpen: openGameOverModal,
   } = useDisclosure();
 
+  const boardString = React.useMemo(
+    () => convertGameResultToString(board),
+    [board]
+  );
+
+  const { onCopy } = useClipboard(boardString);
+
   const fetchTargetWord = () => {
     const target = getRandomWordOfLength(wordLength);
     // console.log("Target word: ", target);
     setTargetWord(target.toLocaleLowerCase());
   };
 
-  const resetGame = () => {
+  const resetGame = useCallback(() => {
     // console.log("resetGame");
 
     fetchTargetWord();
@@ -67,7 +75,7 @@ export const WordleGame: React.FC<WordleGameProps> = ({
     setGameState("active");
     setBoard(getEmptyBoard(guessLimit, wordLength));
     setKeyStatusMap({});
-  };
+  }, [guessLimit, wordLength]);
 
   React.useEffect(() => {
     resetGame();
@@ -202,16 +210,14 @@ export const WordleGame: React.FC<WordleGameProps> = ({
   //     getCurrentGuess().length === wordLength || gameState !== "active",
   // });
 
-  const { onCopy } = useClipboard(convertGameResultToString(board));
-
-  const handleShareClick = () => {
+  const handleShareClick = useCallback(() => {
     onCopy();
-  };
+  }, [onCopy]);
 
-  const handleResetClick = () => {
+  const handleResetClick = useCallback(() => {
     resetGame();
     closeGameOverModal();
-  };
+  }, [resetGame, closeGameOverModal]);
 
   return (
     <>
