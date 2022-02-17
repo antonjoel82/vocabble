@@ -47,7 +47,7 @@ export const GameOverModal: React.FC<GameOverModalProps> = React.memo(
           onEsc={onClose}
         >
           <ModalOverlay />
-          <ModalContent m={4} pt={4}>
+          <ModalContent m={4} pt={4} maxWidth="max-content">
             <ModalHeader display="flex" justifyContent="center" pb={1}>
               <Heading>{isWin ? "You Win!" : "You Lose!"}</Heading>
             </ModalHeader>

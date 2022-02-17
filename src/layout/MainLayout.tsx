@@ -11,6 +11,7 @@ const LINK_ITEMS: NavLinkData[] = [
   // { label: "Settings", icon: FiSettings, href: "/settings" },
 ];
 
+export const BOARD_UID_PATH = "/b/";
 export const APP_NAME = "Vocabble";
 
 export const MainLayout: React.FC = ({ children }) => {

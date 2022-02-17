@@ -7,7 +7,7 @@ export const LOSS_LABELS: string[] = [
   "Better luck next time ¯\\_(ツ)_/¯",
   "Yikes...👁👄👁",
   "Even if you could dodge a wrench, then you still couldn't dodge this word.",
-  "Don't worry, I won't tell your middle English teacher.",
+  "Don't worry, I won't tell your middle school English teacher.",
   "I'm sure your mom will still accept you.",
   "Oopsy daisy!",
 ];

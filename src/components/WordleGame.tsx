@@ -11,6 +11,8 @@ import { GameOverModal } from "./GameOverModal";
 import { GameOverActionBar } from "./GameOverActionBar";
 import { useCallback } from "react";
 import { APP_BASE_URL } from "src/config";
+import { useRouter } from "next/router";
+import { BOARD_UID_PATH } from "src/layout/MainLayout";
 
 export type CharGuessStatus = "correct" | "wrong_position" | "not_in_word";
 export type GameState = "active" | "fail" | "win";
@@ -43,6 +45,8 @@ export const WordleGame: React.FC<WordleGameProps> = ({
     getEmptyBoard(guessLimit, targetWord.length)
   );
   const [keyStatusMap, setKeyStatusMap] = React.useState<KeyStatusMap>({});
+
+  const router = useRouter();
 
   const {
     isOpen: isGameOverModalOpen,
@@ -208,10 +212,22 @@ export const WordleGame: React.FC<WordleGameProps> = ({
     onCopy();
   }, [onCopy]);
 
+  console.log("Route obj", router);
   const handleResetClick = useCallback(() => {
     resetGame();
     closeGameOverModal();
-  }, [resetGame, closeGameOverModal]);
+    // Force server-side prop refresh
+
+    if (router.asPath.includes(BOARD_UID_PATH)) {
+      const queryParams = new URLSearchParams({
+        guesses: String(guessLimit),
+        length: String(targetWord.length),
+      });
+      router.push(`/?${queryParams.toString()}`);
+    } else {
+      router.replace(router.asPath);
+    }
+  }, [resetGame, closeGameOverModal, router.asPath, guessLimit, targetWord]);
 
   return (
     <>
