@@ -212,7 +212,6 @@ export const WordleGame: React.FC<WordleGameProps> = ({
     onCopy();
   }, [onCopy]);
 
-  console.log("Route obj", router);
   const handleResetClick = useCallback(() => {
     resetGame();
     closeGameOverModal();
