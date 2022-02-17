@@ -1,10 +1,10 @@
 import * as React from "react";
 import { CharSquare } from "./CharSquare";
-import { CharGuessResult } from "./WordleGame";
 import { Flex } from "@chakra-ui/react";
+import { WordleGuessResult } from "src/types/WordleGuess";
 
 interface GuessRowProps {
-  guessResults: Partial<CharGuessResult>[];
+  guessResults: Partial<WordleGuessResult>[];
 }
 
 export const GuessRow: React.FC<GuessRowProps> = ({ guessResults }) => {

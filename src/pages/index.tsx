@@ -1,43 +1,34 @@
-import { useRouter } from "next/router";
+import { GetServerSideProps, NextPage } from "next";
+import { getRandomWordOfLength } from "src/api";
+import { getValidatedBoardDims } from "src/util/getValidatedBoardDims";
+import { createBoardUid } from "src/util/server";
 import { WordleGame, WordleGameProps } from "../components/WordleGame";
-import {
-  MIN_WORD_LENGTH,
-  MAX_WORD_LENGTH,
-  MIN_GUESS_LIMIT,
-  MAX_GUESS_LIMIT,
-} from "../config/wordleConstants";
 
-const DEFAULT_WORDLE_GAME_PROPS: WordleGameProps = {
-  guessLimit: 6,
-  wordLength: 5,
+export type WordlePageProps = WordleGameProps;
+
+const Page: NextPage<WordlePageProps> = (wordleGameProps) => {
+  return <WordleGame {...wordleGameProps} />;
 };
 
-export default () => {
-  const { query } = useRouter();
+export const getServerSideProps: GetServerSideProps<WordlePageProps> = async ({
+  query,
+}) => {
+  const guesses = Array.isArray(query.guesses)
+    ? query.guesses[0]
+    : query.guesses;
+  const wordLen = Array.isArray(query.length) ? query.length[0] : query.length;
 
-  const wordleProps: WordleGameProps = DEFAULT_WORDLE_GAME_PROPS;
+  const { wordLength, guessLimit } = getValidatedBoardDims(guesses, wordLen);
+  const targetWord = getRandomWordOfLength(wordLength).toLocaleLowerCase();
+  const boardUid = createBoardUid(targetWord, guessLimit);
 
-  const guesses = query.guesses;
-  if (
-    guesses &&
-    !Number.isNaN(guesses) &&
-    Number.isInteger(+guesses) &&
-    +guesses >= MIN_GUESS_LIMIT &&
-    +guesses <= MAX_GUESS_LIMIT
-  ) {
-    wordleProps.guessLimit = +guesses;
-  }
-
-  const length = query.length;
-  if (
-    length &&
-    !Number.isNaN(length) &&
-    Number.isInteger(+length) &&
-    +length >= MIN_WORD_LENGTH &&
-    +length <= MAX_WORD_LENGTH
-  ) {
-    wordleProps.wordLength = +length;
-  }
-
-  return <WordleGame {...wordleProps} />;
+  return {
+    props: {
+      guessLimit,
+      targetWord,
+      boardUid,
+    },
+  };
 };
+
+export default Page;

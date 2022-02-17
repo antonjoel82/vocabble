@@ -12,5 +12,6 @@ const cipher = fpe({
   domain,
 });
 
+/** Can only be called from server */
 export const encryptWord = (word: string) => cipher.encrypt(word);
 export const decryptWord = (word: string) => cipher.decrypt(word);

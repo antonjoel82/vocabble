@@ -1,5 +1,4 @@
 import * as React from "react";
-import { getRandomWordOfLength } from "../api";
 import { Board, BoardResults } from "../components/Board";
 import { evaluateGuessV2 } from "../util/evaluateGuess";
 import { Container } from "./Container";
@@ -11,22 +10,18 @@ import { convertGameResultToString } from "../util";
 import { GameOverModal } from "./GameOverModal";
 import { GameOverActionBar } from "./GameOverActionBar";
 import { useCallback } from "react";
+import { APP_BASE_URL } from "src/config";
 
 export type CharGuessStatus = "correct" | "wrong_position" | "not_in_word";
 export type GameState = "active" | "fail" | "win";
-
-export interface CharGuessResult {
-  status: CharGuessStatus;
-  char: string;
-}
-
 export interface KeyStatusMap {
   [keyChar: string]: CharGuessStatus;
 }
 
 export interface WordleGameProps {
   guessLimit: number;
-  wordLength: number;
+  targetWord: string;
+  boardUid: string;
 }
 
 const getEmptyBoard = (guessLimit: number, wordLength: number) => {
@@ -38,13 +33,14 @@ const getEmptyBoard = (guessLimit: number, wordLength: number) => {
 
 export const WordleGame: React.FC<WordleGameProps> = ({
   guessLimit,
-  wordLength,
+  targetWord,
+  boardUid,
 }) => {
-  const [targetWord, setTargetWord] = React.useState<string>("");
+  // const [targetWord, setTargetWord] = React.useState<string>("");
   const [currentGuessCount, setCurrentGuessCount] = React.useState<number>(0);
   const [gameState, setGameState] = React.useState<GameState>("active");
   const [board, setBoard] = React.useState<BoardResults>(
-    getEmptyBoard(guessLimit, wordLength)
+    getEmptyBoard(guessLimit, targetWord.length)
   );
   const [keyStatusMap, setKeyStatusMap] = React.useState<KeyStatusMap>({});
 
@@ -55,31 +51,29 @@ export const WordleGame: React.FC<WordleGameProps> = ({
   } = useDisclosure();
 
   const boardString = React.useMemo(
-    () => convertGameResultToString(board, targetWord),
-    [board, targetWord]
+    () =>
+      convertGameResultToString(
+        board,
+        boardUid,
+        APP_BASE_URL // TODO, determine how to handle the URL
+      ),
+    [board, boardUid]
   );
 
   const { onCopy } = useClipboard(boardString);
 
-  const fetchTargetWord = () => {
-    const target = getRandomWordOfLength(wordLength);
-    // console.log("Target word: ", target);
-    setTargetWord(target.toLocaleLowerCase());
-  };
-
   const resetGame = useCallback(() => {
     // console.log("resetGame");
 
-    fetchTargetWord();
     setCurrentGuessCount(0);
     setGameState("active");
-    setBoard(getEmptyBoard(guessLimit, wordLength));
+    setBoard(getEmptyBoard(guessLimit, targetWord.length));
     setKeyStatusMap({});
-  }, [guessLimit, wordLength]);
+  }, [guessLimit, targetWord]);
 
   React.useEffect(() => {
     resetGame();
-  }, [guessLimit, wordLength]);
+  }, [guessLimit, targetWord]);
 
   const getCurrentGuess = () => {
     if (currentGuessCount >= guessLimit) {
@@ -111,8 +105,8 @@ export const WordleGame: React.FC<WordleGameProps> = ({
     const rowBeingUpdated = board[currentGuessCount];
     const emptyIndex = rowBeingUpdated.findIndex(({ char }) => !char);
 
-    if (emptyIndex === -1 || emptyIndex >= wordLength) {
-      alert(`You cannot guess more than ${wordLength} characters.`);
+    if (emptyIndex === -1 || emptyIndex >= targetWord.length) {
+      alert(`You cannot guess more than ${targetWord.length} characters.`);
       return;
     }
 
@@ -132,7 +126,7 @@ export const WordleGame: React.FC<WordleGameProps> = ({
       1 -
       rowBeingUpdated.reverse().findIndex(({ char }) => !!char);
 
-    if (lastCharIndex >= wordLength) {
+    if (lastCharIndex >= targetWord.length) {
       return;
     }
 
@@ -181,8 +175,8 @@ export const WordleGame: React.FC<WordleGameProps> = ({
     const guess = getCurrentGuess();
 
     // console.log("handleSubmit", { guess });
-    if (guess.length !== wordLength) {
-      alert(`You may only guess words of length ${wordLength}`);
+    if (guess.length !== targetWord.length) {
+      alert(`You may only guess words of length ${targetWord.length}`);
       return;
     }
 
@@ -207,7 +201,7 @@ export const WordleGame: React.FC<WordleGameProps> = ({
   //   handleSubmit,
   //   canBackspace: getCurrentGuess().length > 0 || gameState !== "active",
   //   canSubmit:
-  //     getCurrentGuess().length === wordLength || gameState !== "active",
+  //     getCurrentGuess().length === targetWord.length || gameState !== "active",
   // });
 
   const handleShareClick = useCallback(() => {
@@ -238,7 +232,8 @@ export const WordleGame: React.FC<WordleGameProps> = ({
           keyStatusMap={keyStatusMap}
           canBackspace={getCurrentGuess().length > 0 || gameState !== "active"}
           canSubmit={
-            getCurrentGuess().length === wordLength || gameState !== "active"
+            getCurrentGuess().length === targetWord.length ||
+            gameState !== "active"
           }
           handleAddChar={handleAddChar}
           handleBackspace={handleRemoveLastChar}

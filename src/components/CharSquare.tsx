@@ -1,7 +1,8 @@
 import * as React from "react";
 import styled from "@emotion/styled";
 import { Box, BoxProps } from "@chakra-ui/react";
-import { CharGuessResult, CharGuessStatus } from "./WordleGame";
+import { CharGuessStatus } from "./WordleGame";
+import { WordleGuessResult } from "src/types";
 
 const getColorsByStatus = (
   status?: CharGuessStatus
@@ -51,7 +52,7 @@ const BoardBox = styled(Box)<BoxProps | { status: CharGuessStatus }>(
   }
 );
 export interface CharSquareProps extends BoxProps {
-  guessResult: Partial<CharGuessResult>;
+  guessResult: Partial<WordleGuessResult>;
   className?: string;
 }
 
