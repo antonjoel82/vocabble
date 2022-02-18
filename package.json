@@ -3,7 +3,9 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "npx jest",
+    "test-watch": "npx jest --watchAll"
   },
   "dependencies": {
     "@chakra-ui/react": "^1.4.2",

@@ -1,10 +1,11 @@
 import { WordleGuessResult } from "../types";
+import { removeMatchOrTail } from "./removeMatchOrTail";
 
 interface CharToIndices {
   [char: string]: number[];
 }
 
-const wordToLetterLookup = (word: string): CharToIndices => {
+const wordToCharIndicesMap = (word: string): CharToIndices => {
   return word.split("").reduce((dict, char, index) => {
     if (!dict[char]) {
       dict[char] = [];
@@ -17,59 +18,61 @@ const wordToLetterLookup = (word: string): CharToIndices => {
   }, {} as CharToIndices);
 };
 
-export const evaluateGuessV2 = (
+export const evaluateGuess = (
   guess: string,
   targetWord: string
 ): WordleGuessResult[] => {
-  const results: WordleGuessResult[] = []; //Array(guess.length).fill({});
-
-  // console.log("Evaluating", { guess, targetWord });
-
   if (guess.length !== targetWord.length) {
     throw new Error("Invalid word length!");
   }
 
-  // map each character to a list of the indices at which it appears
-  const targetLookup = wordToLetterLookup(targetWord);
+  // map each character from the target word to a list of the indices at which it appears
+  const targetLookup = wordToCharIndicesMap(targetWord);
 
-  // track the number of used guesses for a given character
-  const usedGuesses: Record<string, number> = {};
+  const results: WordleGuessResult[] = guess
+    .split("")
+    .map((guessChar, guessCharIndex) => {
+      // for now, if it's not an exact match, mark it as not_in_word to be evaluated later
+      if (guessChar !== targetWord.charAt(guessCharIndex)) {
+        return {
+          char: guessChar,
+          status: "not_in_word",
+        };
+      }
 
-  // console.log("Lookups: guess, target", guessLookup, targetLookup);
+      // current letter has a match in the same position
+      // Remove from look up so we don't over match
+      targetLookup[guessChar] = removeMatchOrTail(
+        targetLookup[guessChar],
+        guessCharIndex
+      );
 
-  guess.split("").forEach((guessChar, guessCharIndex) => {
-    // current letter has a match in the same position
-    if (guessChar === targetWord.charAt(guessCharIndex)) {
-      // result.status = "correct";
-      usedGuesses[guessChar] = (usedGuesses[guessChar] ?? 0) + 1;
+      return {
+        char: guessChar,
+        status: "correct",
+      };
+    });
+
+  return results.map((existingResult, guessCharIndex) => {
+    const matchingIndices = targetLookup[existingResult.char] ?? [];
+
+    // if the status is already marked as correct or there are no remaining matches,
+    // just use the existing result
+    if (existingResult.status === "correct" || matchingIndices.length === 0) {
+      return existingResult;
     }
-  });
 
-  guess.split("").forEach((guessChar, guessCharIndex) => {
-    const result: WordleGuessResult = {
-      char: guessChar,
-      status: "not_in_word",
+    // Remove from look up so we don't over match
+    targetLookup[existingResult.char] = removeMatchOrTail(
+      targetLookup[existingResult.char],
+      guessCharIndex
+    );
+
+    // at this point we know this character has other locations in the word, but it's not
+    // in the correct spot; thus, it's wrong_position
+    return {
+      ...existingResult,
+      status: "wrong_position",
     };
-
-    const matchingIndices = targetLookup[guessChar] ?? [];
-
-    // current letter has a match in the same position
-    if (matchingIndices.indexOf(guessCharIndex) >= 0) {
-      result.status = "correct";
-      usedGuesses[guessChar] = (usedGuesses[guessChar] ?? 0) + 1;
-    } else if (
-      // there's at least one match but ensure we don't signal a phantom extra character
-      matchingIndices.length > 0 &&
-      (usedGuesses[guessChar] ?? 0) <= matchingIndices.length
-    ) {
-      result.status = "wrong_position";
-      usedGuesses[guessChar] = (usedGuesses[guessChar] ?? 0) + 1;
-    } else {
-      result.status = "not_in_word";
-    }
-
-    results.push(result);
   });
-
-  return results;
 };
