@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Board, BoardResults } from "../components/Board";
-import { evaluateGuessV2 } from "../util/evaluateGuess";
+import { evaluateGuess } from "../util/evaluateGuess";
 import { Container } from "./Container";
 import { WordleKeyboard } from "./keyboard/WordleKeyboard";
 import { validateChar } from "../util/validateChar";
@@ -142,7 +142,7 @@ export const WordleGame: React.FC<WordleGameProps> = ({
   };
 
   const submitGuess = (guess: string) => {
-    const guessResults = evaluateGuessV2(guess, targetWord);
+    const guessResults = evaluateGuess(guess, targetWord);
 
     setCurrentGuessCount((curGuessCount) => curGuessCount + 1);
 
