@@ -1,4 +1,5 @@
 import { GetServerSideProps, NextPage } from "next";
+import { getWordInfo } from "src/api";
 import { parseBoardUid } from "src/util/server";
 import { WordleGame, WordleGameProps } from "../../components/WordleGame";
 
@@ -18,12 +19,15 @@ export const getServerSideProps: GetServerSideProps<WordlePageProps> = async ({
     ? query.boardUid[0]
     : query.boardUid;
 
-  let targetWord: string;
+  let word: string;
+  let definition: string;
   let guessLimit: number;
 
   try {
     const parseResults = parseBoardUid(boardUid);
-    targetWord = parseResults.targetWord;
+    const wordInfo = getWordInfo(parseResults.targetWord);
+    word = wordInfo.word;
+    definition = wordInfo.definition;
     guessLimit = parseResults.guessLimit;
   } catch (err) {
     return {
@@ -37,7 +41,10 @@ export const getServerSideProps: GetServerSideProps<WordlePageProps> = async ({
   return {
     props: {
       guessLimit,
-      targetWord,
+      targetWordInfo: {
+        word,
+        definition,
+      },
       boardUid,
     },
   };

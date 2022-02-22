@@ -1,5 +1,5 @@
 import { GetServerSideProps, NextPage } from "next";
-import { getRandomWordOfLength } from "src/api";
+import { getRandomWordInfoForLength } from "src/api";
 import { getValidatedBoardDims } from "src/util/getValidatedBoardDims";
 import { createBoardUid } from "src/util/server";
 import { WordleGame, WordleGameProps } from "../components/WordleGame";
@@ -19,13 +19,13 @@ export const getServerSideProps: GetServerSideProps<WordlePageProps> = async ({
   const wordLen = Array.isArray(query.length) ? query.length[0] : query.length;
 
   const { wordLength, guessLimit } = getValidatedBoardDims(guesses, wordLen);
-  const targetWord = getRandomWordOfLength(wordLength).toLocaleLowerCase();
-  const boardUid = createBoardUid(targetWord, guessLimit);
+  const targetWordInfo = getRandomWordInfoForLength(wordLength);
+  const boardUid = createBoardUid(targetWordInfo.word, guessLimit);
 
   return {
     props: {
       guessLimit,
-      targetWord,
+      targetWordInfo,
       boardUid,
     },
   };

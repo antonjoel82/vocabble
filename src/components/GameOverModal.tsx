@@ -9,18 +9,20 @@ import {
   Text,
   ModalProps,
   Heading,
+  Collapse,
+  Box,
 } from "@chakra-ui/react";
-import React, { useEffect, useMemo } from "react";
+import React, { useMemo } from "react";
+import { WordInfo } from "src/types";
 import { LOSS_LABELS, WIN_LABELS } from "../config";
 import { getRandomStringFromList } from "../util";
-import { CharSquare } from "./CharSquare";
 import { GameOverActionBar, GameOverActionBarProps } from "./GameOverActionBar";
-
+import { WordInfoToggleButton } from "./WordInfoToggleButton";
 export interface GameOverModalProps
   extends Pick<ModalProps, "onClose" | "isOpen">,
     GameOverActionBarProps {
   isWin: boolean;
-  targetWord: string;
+  targetWordInfo: WordInfo;
 }
 
 export const GameOverModal: React.FC<GameOverModalProps> = React.memo(
@@ -30,8 +32,12 @@ export const GameOverModal: React.FC<GameOverModalProps> = React.memo(
     isOpen,
     handlePrimaryClick,
     handleSecondaryClick,
-    targetWord,
+    targetWordInfo,
   }) => {
+    const [shouldShowDefinition, setShouldShowDefinition] =
+      React.useState(false);
+    const handleToggle = () => setShouldShowDefinition((show) => !show);
+
     const gameOverMessage = useMemo(
       () => getRandomStringFromList(isWin ? WIN_LABELS : LOSS_LABELS),
       [isWin]
@@ -47,7 +53,7 @@ export const GameOverModal: React.FC<GameOverModalProps> = React.memo(
           onEsc={onClose}
         >
           <ModalOverlay />
-          <ModalContent m={4} pt={4} maxWidth="max-content">
+          <ModalContent m={4} pt={4} maxWidth="100vw" maxHeight="94vh">
             <ModalHeader display="flex" justifyContent="center" pb={1}>
               <Heading>{isWin ? "You Win!" : "You Lose!"}</Heading>
             </ModalHeader>
@@ -58,19 +64,33 @@ export const GameOverModal: React.FC<GameOverModalProps> = React.memo(
               flexDirection="column"
               rowGap={3}
             >
-              <Text textAlign="center">The word was</Text>
-              <CharSquare
-                guessResult={{
-                  char: targetWord,
-                  status: isWin ? "correct" : "not_in_word",
-                }}
-                textTransform="uppercase"
-                width="fit-content"
-                px={2}
-              />
               <Text textAlign="center" fontStyle="italic">
                 {gameOverMessage}
               </Text>
+              <Text textAlign="center">The word was</Text>
+              <WordInfoToggleButton
+                isWin={isWin}
+                wordInfo={targetWordInfo}
+                toggleLabel={`Click to ${
+                  shouldShowDefinition ? "hide" : "show"
+                } definition(s)`}
+                onClick={handleToggle}
+                mb={2}
+              />
+              <Collapse in={shouldShowDefinition}>
+                <Box
+                  border="2px solid"
+                  p={2}
+                  px={3}
+                  borderColor="gray"
+                  overflowY="scroll"
+                  maxHeight="40vh"
+                >
+                  <Text wordBreak="break-word">
+                    {targetWordInfo.definition}
+                  </Text>
+                </Box>
+              </Collapse>
             </ModalBody>
             <ModalFooter justifyContent={"center"}>
               <GameOverActionBar
