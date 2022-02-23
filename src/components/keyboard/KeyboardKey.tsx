@@ -45,13 +45,29 @@ const KeyboardButton = styled(Button)<ButtonProps & { status: KeyStatus }>(
       padding-inline-start: 0;
       padding-inline-end: 0;
 
-      min-width: 30px;
-      padding: 1rem 0.6rem;
+      min-width: 26px;
+      padding: 1rem 0.5rem;
 
       text-transform: uppercase;
       background-color: ${bgColor};
       color: ${fontColor};
-      font-size: 1rem;
+      font-weight: bold;
+      font-size: 0.8rem;
+
+      :active {
+        background-color: ${bgColor};
+        outline: none;
+        box-shadow: none;
+      }
+
+      :hover:not(:disabled) {
+        background-color: ${bgColor};
+        box-shadow: var(--chakra-shadows-outline);
+      }
+
+      :hover:disabled {
+        background-color: ${bgColor};
+      }
     `;
   }
 );
@@ -70,14 +86,7 @@ export const KeyboardKey: React.FC<KeyboardKeyProps> = ({
   isDisabled,
 }) => {
   return (
-    <KeyboardButton
-      status={status}
-      onClick={handleClick}
-      disabled={isDisabled}
-      //prevent weird buttons styling after press
-      _focus={{}}
-      _active={{}}
-    >
+    <KeyboardButton status={status} onClick={handleClick} disabled={isDisabled}>
       {label}
     </KeyboardButton>
   );

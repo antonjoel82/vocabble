@@ -261,9 +261,9 @@ export const WordleGame: React.FC<WordleGameProps> = ({
 
   return (
     <>
-      <Container overflow="scroll" background="none" pt={4} px={4}>
+      <Container overflowX="auto" background="none" pt={4} px={4}>
         {/* allow scrolling to bottom */}
-        <Box pb={`160px`}>
+        <Box pb={`160px`} ml="auto" mr="auto">
           <Board boardData={board} />
           {gameState !== "active" && (
             <Box mt={4}>
@@ -274,18 +274,18 @@ export const WordleGame: React.FC<WordleGameProps> = ({
             </Box>
           )}
         </Box>
-        <WordleKeyboard
-          keyStatusMap={keyStatusMap}
-          canBackspace={getCurrentGuess().length > 0 || gameState !== "active"}
-          canSubmit={
-            getCurrentGuess().length === targetWordInfo.word.length ||
-            gameState !== "active"
-          }
-          handleAddChar={handleAddChar}
-          handleBackspace={handleRemoveLastChar}
-          handleSubmit={handleSubmit}
-        />
       </Container>
+      <WordleKeyboard
+        keyStatusMap={keyStatusMap}
+        canBackspace={getCurrentGuess().length > 0 || gameState !== "active"}
+        canSubmit={
+          getCurrentGuess().length === targetWordInfo.word.length ||
+          gameState !== "active"
+        }
+        handleAddChar={handleAddChar}
+        handleBackspace={handleRemoveLastChar}
+        handleSubmit={handleSubmit}
+      />
       <GameOverModal
         isOpen={isGameOverModalOpen}
         onClose={closeGameOverModal}

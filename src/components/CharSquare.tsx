@@ -39,8 +39,8 @@ const BoardBox = styled(Box)<BoxProps | { status: CharGuessStatus }>(
       justify-content: center;
       align-items: center;
       text-transform: uppercase;
-      width: ${width ?? "3.5rem"};
-      height: 3.5rem;
+      width: ${width ?? "3.3rem"};
+      height: 3.3rem;
       font-weight: bolder;
       font-size: 2rem;
       border: 2px solid darkgray;
