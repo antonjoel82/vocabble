@@ -1,14 +1,13 @@
 import { BoardResults } from "src/components/Board";
+import { evaluateGuess } from "./evaluateGuess";
 
-interface BaseDeserializationParams {
+interface LineDeserializationParams {
   wordLength: number;
-}
-
-interface LineDeserializationParams extends BaseDeserializationParams {
   line: string;
 }
 
-interface BoardDeserializationParams extends BaseDeserializationParams {
+interface BoardDeserializationParams {
+  targetWord: string;
   serializedBoard: string;
   numGuesses: number;
 }
@@ -31,11 +30,16 @@ const createEmptyRow = (wordLength: number): BoardResults[0] =>
 export const deserializeBoard = ({
   serializedBoard,
   numGuesses,
-  wordLength,
+  targetWord,
 }: BoardDeserializationParams): BoardResults => {
+  const wordLength = targetWord.length;
   const maybePartialBoard = serializedBoard
     .split("\n")
-    .map((line) => deserializeLine({ line, wordLength }));
+    .map((line) =>
+      line.length === wordLength
+        ? evaluateGuess(line, targetWord)
+        : deserializeLine({ line, wordLength })
+    );
 
   // Can return board as is if it has numGuesses rows
   if (maybePartialBoard.length === numGuesses) {

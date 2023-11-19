@@ -2,11 +2,11 @@ import { BoardResults } from "src/components/Board";
 import { deserializeBoard } from "./deserializeBoard";
 
 const FULL_BOARD: BoardResults = Array(6).fill([
-  { char: "j" },
-  { char: "a" },
-  { char: "d" },
-  { char: "e" },
-  { char: "d" },
+  { char: "j", status: "not_in_word" },
+  { char: "a", status: "correct" },
+  { char: "d", status: "correct" },
+  { char: "e", status: "correct" },
+  { char: "d", status: "not_in_word" },
 ]);
 
 describe("deserializeBoard", () => {
@@ -15,7 +15,7 @@ describe("deserializeBoard", () => {
       deserializeBoard({
         serializedBoard: "jaded\njaded\njaded\njaded\njaded\njaded",
         numGuesses: 6,
-        wordLength: 5,
+        targetWord: "laden",
       })
     ).toEqual(FULL_BOARD);
   });
@@ -31,7 +31,7 @@ describe("deserializeBoard", () => {
       deserializeBoard({
         serializedBoard: "jaded\njaded\njaded\nhel",
         numGuesses: 6,
-        wordLength: 5,
+        targetWord: "laden",
       })
     ).toEqual(board);
   });
