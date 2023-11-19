@@ -4,6 +4,7 @@ import { FiHome, FiSettings, FiThumbsUp } from "react-icons/fi";
 import { Header } from "../components/Header";
 import { NavLinkData } from "../components/NavLink";
 import { Sidebar } from "../components/Sidebar";
+import { PropsWithChildren } from "react";
 
 const LINK_ITEMS: NavLinkData[] = [
   { label: "Home", icon: FiHome, href: "/" },
@@ -14,7 +15,7 @@ const LINK_ITEMS: NavLinkData[] = [
 export const BOARD_UID_PATH = "/b/";
 export const APP_NAME = "Vocabble";
 
-export const MainLayout: React.FC = ({ children }) => {
+export const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const sidebarBaseProps = {
