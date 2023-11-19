@@ -4,7 +4,7 @@ import { evaluateGuess } from "../util/evaluateGuess";
 import { Container } from "./Container";
 import { WordleKeyboard } from "./keyboard/WordleKeyboard";
 import { validateChar } from "../util/validateChar";
-import produce from "immer";
+import { produce } from "immer";
 import { Box, useClipboard, useDisclosure, useToast } from "@chakra-ui/react";
 import { convertGameResultToString } from "../util";
 import { GameOverModal } from "./GameOverModal";

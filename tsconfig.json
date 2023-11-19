@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -13,18 +17,43 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "typeRoots": ["./thirdPartyTypes", "./node_modules/@types"],
+    "typeRoots": [
+      "./thirdPartyTypes",
+      "./node_modules/@types"
+    ],
     "baseUrl": ".",
     "paths": {
-      "#root/*": ["/*"],
-      "#components/*": ["components/*"],
-      "#styles/*": ["styles/*"],
-      "#sections/*": ["sections/*"],
-      "#layout/*": ["layout/*"],
-      "#public/*": ["public/*"],
-      "#lib/*": ["lib/*"]
-    }
+      "#root/*": [
+        "/*"
+      ],
+      "#components/*": [
+        "components/*"
+      ],
+      "#styles/*": [
+        "styles/*"
+      ],
+      "#sections/*": [
+        "sections/*"
+      ],
+      "#layout/*": [
+        "layout/*"
+      ],
+      "#public/*": [
+        "public/*"
+      ],
+      "#lib/*": [
+        "lib/*"
+      ]
+    },
+    "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "thirdPartyTypes"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "thirdPartyTypes"
+  ]
 }

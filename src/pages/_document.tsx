@@ -8,7 +8,7 @@ export default class Document extends NextDocument {
     return (
       <Html>
         <Head>
-          <link rel="shortcut icon" href="/static/favicon.ico" />
+          <link rel="shortcut icon" href="/favicon.ico" />
           <meta
             name="google-site-verification"
             content="Ba-BoHCYJcLeCHJpeMHs-5lx2VKS7Mo_zD7c9hPCb1c"
@@ -21,7 +21,7 @@ export default class Document extends NextDocument {
             property="og:description"
             content="Word game with variable board sizes."
           />
-          <meta property="og:image" content={"/static/vocabble.png"} />
+          <meta property="og:image" content={"/vocabble.png"} />
         </Head>
         <body>
           {/* Make Color mode to persists when you refresh the page. */}
