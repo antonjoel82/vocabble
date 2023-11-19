@@ -31,7 +31,7 @@ const getColorsByStatus = (
   }
 };
 
-const BoardBox = styled(Box)<BoxProps | { status: CharGuessStatus }>(
+const BoardBox = styled(Box)<BoxProps & { status: CharGuessStatus }>(
   ({ status, width }) => {
     const { bgColor, fontColor } = getColorsByStatus(status);
     return `
