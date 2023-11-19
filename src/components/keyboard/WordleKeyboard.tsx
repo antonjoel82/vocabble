@@ -3,7 +3,6 @@ import React from "react";
 import { FiDelete } from "react-icons/fi";
 import { KeyboardBaseProps } from "../../types";
 
-import { Container } from "../Container";
 import { CharGuessStatus } from "../WordleGame";
 import { KEYBOARD_CHARS } from "./ constants";
 import { KeyboardKeyProps } from "./KeyboardKey";
@@ -36,39 +35,30 @@ export const WordleKeyboard: React.FC<WordleKeyboardProps> = ({
   };
 
   return (
-    <Container
-      flexDirection="row"
-      justifyContent="center"
-      position="fixed"
-      bottom="0"
-      width="100%"
-      py={3}
-    >
-      <Flex justifyContent="center" direction="column" rowGap={2}>
-        {KEYBOARD_CHARS.map((charRow, rowIndex) => {
-          const keyConfigs: KeyboardKeyProps[] = charRow.map((char) => ({
-            label: char,
-            status: keyStatusMap[char] ?? "default",
-            handleClick: () => {
-              handleAddChar(char);
-            },
-            isDisabled: false,
-          }));
+    <Flex justifyContent="center" direction="column" rowGap={2}>
+      {KEYBOARD_CHARS.map((charRow, rowIndex) => {
+        const keyConfigs: KeyboardKeyProps[] = charRow.map((char) => ({
+          label: char,
+          status: keyStatusMap[char] ?? "default",
+          handleClick: () => {
+            handleAddChar(char);
+          },
+          isDisabled: false,
+        }));
 
-          // for the bottom row of the keyboard, add control buttons
-          if (rowIndex === KEYBOARD_CHARS.length - 1) {
-            keyConfigs.unshift(enterKeyConfig); // add on left
-            keyConfigs.push(backspaceKeyConfig); // add on right: ;
-          }
+        // for the bottom row of the keyboard, add control buttons
+        if (rowIndex === KEYBOARD_CHARS.length - 1) {
+          keyConfigs.unshift(enterKeyConfig); // add on left
+          keyConfigs.push(backspaceKeyConfig); // add on right: ;
+        }
 
-          return (
-            <KeyboardRow
-              key={`keyboard-row-${rowIndex}`}
-              keyConfigs={keyConfigs}
-            />
-          );
-        })}
-      </Flex>
-    </Container>
+        return (
+          <KeyboardRow
+            key={`keyboard-row-${rowIndex}`}
+            keyConfigs={keyConfigs}
+          />
+        );
+      })}
+    </Flex>
   );
 };

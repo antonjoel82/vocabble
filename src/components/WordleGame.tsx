@@ -35,6 +35,8 @@ const getEmptyBoard = (guessLimit: number, wordLength: number) => {
   return board;
 };
 
+const KEYBOARD_HEIGHT = "160px";
+
 export const WordleGame: React.FC<WordleGameProps> = ({
   guessLimit,
   targetWordInfo,
@@ -263,7 +265,7 @@ export const WordleGame: React.FC<WordleGameProps> = ({
     <>
       <Container overflowX="auto" background="none" pt={4} px={4}>
         {/* allow scrolling to bottom */}
-        <Box pb={`160px`} ml="auto" mr="auto">
+        <Box pb={KEYBOARD_HEIGHT} ml="auto" mr="auto">
           <Board boardData={board} />
           {gameState !== "active" && (
             <Box mt={4}>
@@ -275,17 +277,26 @@ export const WordleGame: React.FC<WordleGameProps> = ({
           )}
         </Box>
       </Container>
-      <WordleKeyboard
-        keyStatusMap={keyStatusMap}
-        canBackspace={getCurrentGuess().length > 0 || gameState !== "active"}
-        canSubmit={
-          getCurrentGuess().length === targetWordInfo.word.length ||
-          gameState !== "active"
-        }
-        handleAddChar={handleAddChar}
-        handleBackspace={handleRemoveLastChar}
-        handleSubmit={handleSubmit}
-      />
+      <Container
+        flexDirection="row"
+        justifyContent="center"
+        position="fixed"
+        bottom="0"
+        width="100%"
+        py={3}
+      >
+        <WordleKeyboard
+          keyStatusMap={keyStatusMap}
+          canBackspace={getCurrentGuess().length > 0 || gameState !== "active"}
+          canSubmit={
+            getCurrentGuess().length === targetWordInfo.word.length ||
+            gameState !== "active"
+          }
+          handleAddChar={handleAddChar}
+          handleBackspace={handleRemoveLastChar}
+          handleSubmit={handleSubmit}
+        />
+      </Container>
       <GameOverModal
         isOpen={isGameOverModalOpen}
         onClose={closeGameOverModal}
