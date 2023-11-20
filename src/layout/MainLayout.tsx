@@ -5,6 +5,7 @@ import { Header } from "../components/Header";
 import { NavLinkData } from "../components/NavLink";
 import { Sidebar } from "../components/Sidebar";
 import { PropsWithChildren } from "react";
+import { SIDEBAR_WIDTH_CHAKRA } from "src/config/style.const";
 
 const LINK_ITEMS: NavLinkData[] = [
   { label: "Home", icon: FiHome, href: "/" },
@@ -42,7 +43,7 @@ export const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
       </Drawer>
 
       <Header onOpen={onOpen} title={APP_NAME} />
-      <Box ml={{ base: 0, md: 60 }}>{children}</Box>
+      <Box ml={{ base: 0, md: SIDEBAR_WIDTH_CHAKRA }}>{children}</Box>
     </Box>
   );
 };

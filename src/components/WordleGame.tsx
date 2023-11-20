@@ -15,6 +15,10 @@ import { useRouter } from "next/router";
 import { BOARD_UID_PATH } from "src/layout/MainLayout";
 import { WordInfo } from "src/types";
 import { validateWord } from "src/api";
+import {
+  KEYBOARD_HEIGHT_CHAKRA,
+  SIDEBAR_WIDTH_CHAKRA,
+} from "src/config/style.const";
 
 export type CharGuessStatus = "correct" | "wrong_position" | "not_in_word";
 export type GameState = "active" | "fail" | "win";
@@ -30,12 +34,8 @@ export interface WordleGameProps {
 
 const getEmptyBoard = (guessLimit: number, wordLength: number) => {
   const board = Array(guessLimit).fill(Array(wordLength).fill({}));
-  // console.log("Board", board);
-
   return board;
 };
-
-const KEYBOARD_HEIGHT = "160px";
 
 export const WordleGame: React.FC<WordleGameProps> = ({
   guessLimit,
@@ -265,7 +265,7 @@ export const WordleGame: React.FC<WordleGameProps> = ({
     <>
       <Container overflowX="auto" background="none" pt={4} px={4}>
         {/* allow scrolling to bottom */}
-        <Box pb={KEYBOARD_HEIGHT} ml="auto" mr="auto">
+        <Box pb={KEYBOARD_HEIGHT_CHAKRA} ml="auto" mr="auto">
           <Board boardData={board} />
           {gameState !== "active" && (
             <Box mt={4}>
@@ -284,6 +284,8 @@ export const WordleGame: React.FC<WordleGameProps> = ({
         bottom="0"
         width="100%"
         py={3}
+        // needs offset for open menu
+        pr={{ base: 0, md: SIDEBAR_WIDTH_CHAKRA }}
       >
         <WordleKeyboard
           keyStatusMap={keyStatusMap}

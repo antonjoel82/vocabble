@@ -1,2 +1,2 @@
 export * from "./gameOverLabels";
-export * from "./wordleConstants";
+export * from "./game.const";

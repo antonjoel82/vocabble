@@ -1,6 +1,7 @@
 import { IconButton, Flex, Text, FlexProps } from "@chakra-ui/react";
 import { FiMenu } from "react-icons/fi";
 import { DarkModeSwitch } from "./DarkModeSwitch";
+import { SIDEBAR_WIDTH_CHAKRA } from "src/config/style.const";
 
 interface HeaderProps extends FlexProps {
   onOpen: () => void;
@@ -14,7 +15,7 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   return (
     <Flex
-      ml={{ base: 0, md: 60 }}
+      ml={{ base: 0, md: SIDEBAR_WIDTH_CHAKRA }}
       px={4}
       position="sticky"
       top="0"
