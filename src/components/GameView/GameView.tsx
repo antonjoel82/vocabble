@@ -22,7 +22,7 @@ import {
 import { getEmptyBoard } from "src/util/getEmptyBoard";
 
 export type CharGuessStatus = "CORRECT" | "WRONG_POSITION" | "NOT_IN_WORD";
-export type GameState = "active" | "fail" | "win";
+export type GameState = "ACTIVE" | "LOST" | "WON";
 export interface KeyStatusMap {
   [keyChar: string]: CharGuessStatus;
 }
@@ -40,7 +40,7 @@ export const GameView: React.FC<GameViewProps> = ({
 }) => {
   // const [targetWordInfo, setTargetWord] = React.useState<string>("");
   const [currentGuessCount, setCurrentGuessCount] = React.useState<number>(0);
-  const [gameState, setGameState] = React.useState<GameState>("active");
+  const [gameState, setGameState] = React.useState<GameState>("ACTIVE");
   const [board, setBoard] = React.useState<BoardResults>(
     getEmptyBoard(guessLimit, targetWordInfo.word.length)
   );
@@ -72,7 +72,7 @@ export const GameView: React.FC<GameViewProps> = ({
     // console.log("resetGame");
 
     setCurrentGuessCount(0);
-    setGameState("active");
+    setGameState("ACTIVE");
     setBoard(getEmptyBoard(guessLimit, targetWordInfo.word.length));
     setKeyStatusMap({});
   }, [guessLimit, targetWordInfo]);
@@ -175,7 +175,7 @@ export const GameView: React.FC<GameViewProps> = ({
     setKeyStatusMap(updatedKeyStatusMap);
 
     if (guessResults.every(({ status }) => status === "CORRECT")) {
-      setGameState("win");
+      setGameState("WON");
     }
   };
 
@@ -211,13 +211,13 @@ export const GameView: React.FC<GameViewProps> = ({
   };
 
   React.useEffect(() => {
-    if (currentGuessCount >= guessLimit && gameState !== "win") {
-      setGameState("fail");
+    if (currentGuessCount >= guessLimit && gameState !== "WON") {
+      setGameState("LOST");
     }
   }, [currentGuessCount]);
 
   React.useEffect(() => {
-    if (gameState !== "active") {
+    if (gameState !== "ACTIVE") {
       openGameOverModal();
     }
   }, [gameState]);
@@ -226,9 +226,9 @@ export const GameView: React.FC<GameViewProps> = ({
   //   handleAddChar,
   //   handleBackspace: handleRemoveLastChar,
   //   handleSubmit,
-  //   canBackspace: getCurrentGuess().length > 0 || gameState !== "active",
+  //   canBackspace: getCurrentGuess().length > 0 || gameState !== "ACTIVE",
   //   canSubmit:
-  //     getCurrentGuess().length === targetWordInfo.word.length || gameState !== "active",
+  //     getCurrentGuess().length === targetWordInfo.word.length || gameState !== "ACTIVE",
   // });
 
   const handleShareClick = useCallback(() => {
@@ -263,7 +263,7 @@ export const GameView: React.FC<GameViewProps> = ({
         {/* allow scrolling to bottom */}
         <Box pb={KEYBOARD_HEIGHT_CHAKRA} ml="auto" mr="auto">
           <Board boardData={board} />
-          {gameState !== "active" && (
+          {gameState !== "ACTIVE" && (
             <Box mt={4}>
               <GameOverActionBar
                 handlePrimaryClick={handleShareClick}
@@ -285,10 +285,10 @@ export const GameView: React.FC<GameViewProps> = ({
       >
         <WordleKeyboard
           keyStatusMap={keyStatusMap}
-          canBackspace={getCurrentGuess().length > 0 || gameState !== "active"}
+          canBackspace={getCurrentGuess().length > 0 || gameState !== "ACTIVE"}
           canSubmit={
             getCurrentGuess().length === targetWordInfo.word.length ||
-            gameState !== "active"
+            gameState !== "ACTIVE"
           }
           handleAddChar={handleAddChar}
           handleBackspace={handleRemoveLastChar}
@@ -299,7 +299,7 @@ export const GameView: React.FC<GameViewProps> = ({
         isOpen={isGameOverModalOpen}
         onClose={closeGameOverModal}
         targetWordInfo={targetWordInfo}
-        isWin={gameState === "win"}
+        isWin={gameState === "WON"}
         handlePrimaryClick={handleShareClick}
         handleSecondaryClick={handleResetClick}
       />
