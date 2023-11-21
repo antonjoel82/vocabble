@@ -19,6 +19,7 @@ import {
   KEYBOARD_HEIGHT_CHAKRA,
   SIDEBAR_WIDTH_CHAKRA,
 } from "../../config/style.const";
+import { getEmptyBoard } from "src/util/getEmptyBoard";
 
 export type CharGuessStatus = "correct" | "wrong_position" | "not_in_word";
 export type GameState = "active" | "fail" | "win";
@@ -31,11 +32,6 @@ export interface GameViewProps {
   targetWordInfo: WordInfo;
   boardUid: string;
 }
-
-const getEmptyBoard = (guessLimit: number, wordLength: number) => {
-  const board = Array(guessLimit).fill(Array(wordLength).fill({}));
-  return board;
-};
 
 export const GameView: React.FC<GameViewProps> = ({
   guessLimit,
