@@ -20,9 +20,9 @@ import {
   SIDEBAR_WIDTH_CHAKRA,
 } from "../../config/style.const";
 import { getEmptyBoard } from "src/util/getEmptyBoard";
+import { useGameState } from "./useGameState";
 
 export type CharGuessStatus = "CORRECT" | "WRONG_POSITION" | "NOT_IN_WORD";
-export type GameState = "ACTIVE" | "LOST" | "WON";
 export interface KeyStatusMap {
   [keyChar: string]: CharGuessStatus;
 }
@@ -40,14 +40,14 @@ export const GameView: React.FC<GameViewProps> = ({
 }) => {
   // const [targetWordInfo, setTargetWord] = React.useState<string>("");
   const [currentGuessCount, setCurrentGuessCount] = React.useState<number>(0);
-  const [gameState, setGameState] = React.useState<GameState>("ACTIVE");
   const [board, setBoard] = React.useState<BoardResults>(
     getEmptyBoard(guessLimit, targetWordInfo.word.length)
   );
   const [keyStatusMap, setKeyStatusMap] = React.useState<KeyStatusMap>({});
 
-  const toast = useToast();
+  const { gameState, setGameState } = useGameState();
 
+  const toast = useToast();
   const router = useRouter();
 
   const {
@@ -286,7 +286,7 @@ export const GameView: React.FC<GameViewProps> = ({
         isOpen={isGameOverModalOpen}
         onClose={closeGameOverModal}
         targetWordInfo={targetWordInfo}
-        isWin={gameState === "WON"}
+        hasWon={gameState === "WON"}
         handlePrimaryClick={handleShareClick}
         handleSecondaryClick={handleResetClick}
       />

@@ -21,13 +21,13 @@ import { WordInfoToggleButton } from "./WordInfoToggleButton";
 export interface GameOverModalProps
   extends Pick<ModalProps, "onClose" | "isOpen">,
     GameOverActionBarProps {
-  isWin: boolean;
+  hasWon: boolean;
   targetWordInfo: WordInfo;
 }
 
 export const GameOverModal: React.FC<GameOverModalProps> = React.memo(
   ({
-    isWin,
+    hasWon: isWin,
     onClose,
     isOpen,
     handlePrimaryClick,
@@ -79,7 +79,8 @@ export const GameOverModal: React.FC<GameOverModalProps> = React.memo(
               />
               <Collapse in={shouldShowDefinition}>
                 <Box
-                  border="2px solid"
+                  border={"2px"}
+                  borderStyle="solid"
                   p={2}
                   px={3}
                   borderColor="gray"
