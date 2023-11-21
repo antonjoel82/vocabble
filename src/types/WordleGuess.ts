@@ -1,4 +1,4 @@
-export type WordleGuessStatus = "correct" | "wrong_position" | "not_in_word";
+export type WordleGuessStatus = "CORRECT" | "WRONG_POSITION" | "NOT_IN_WORD";
 
 export interface WordleGuessResult {
   status: WordleGuessStatus;

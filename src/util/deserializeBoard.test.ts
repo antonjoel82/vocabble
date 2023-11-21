@@ -2,11 +2,11 @@ import { BoardResults } from "src/components/Board";
 import { deserializeBoard } from "./deserializeBoard";
 
 const FULL_BOARD: BoardResults = Array(6).fill([
-  { char: "j", status: "not_in_word" },
-  { char: "a", status: "correct" },
-  { char: "d", status: "correct" },
-  { char: "e", status: "correct" },
-  { char: "d", status: "not_in_word" },
+  { char: "j", status: "NOT_IN_WORD" },
+  { char: "a", status: "CORRECT" },
+  { char: "d", status: "CORRECT" },
+  { char: "e", status: "CORRECT" },
+  { char: "d", status: "NOT_IN_WORD" },
 ]);
 
 describe("deserializeBoard", () => {

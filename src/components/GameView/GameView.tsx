@@ -21,7 +21,7 @@ import {
 } from "../../config/style.const";
 import { getEmptyBoard } from "src/util/getEmptyBoard";
 
-export type CharGuessStatus = "correct" | "wrong_position" | "not_in_word";
+export type CharGuessStatus = "CORRECT" | "WRONG_POSITION" | "NOT_IN_WORD";
 export type GameState = "active" | "fail" | "win";
 export interface KeyStatusMap {
   [keyChar: string]: CharGuessStatus;
@@ -164,17 +164,17 @@ export const GameView: React.FC<GameViewProps> = ({
         const previousKeyStatus = draft[char];
 
         draft[char] =
-          previousKeyStatus === "correct" || status === "correct"
-            ? "correct"
-            : previousKeyStatus === "wrong_position" ||
-              status === "wrong_position"
-            ? "wrong_position"
+          previousKeyStatus === "CORRECT" || status === "CORRECT"
+            ? "CORRECT"
+            : previousKeyStatus === "WRONG_POSITION" ||
+              status === "WRONG_POSITION"
+            ? "WRONG_POSITION"
             : status;
       }
     });
     setKeyStatusMap(updatedKeyStatusMap);
 
-    if (guessResults.every(({ status }) => status === "correct")) {
+    if (guessResults.every(({ status }) => status === "CORRECT")) {
       setGameState("win");
     }
   };

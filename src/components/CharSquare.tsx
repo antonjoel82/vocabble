@@ -8,17 +8,17 @@ const getColorsByStatus = (
   status?: CharGuessStatus
 ): { bgColor: string; fontColor: string } => {
   switch (status) {
-    case "correct":
+    case "CORRECT":
       return {
         bgColor: "#6aaa64", // green
         fontColor: "#fff",
       };
-    case "wrong_position":
+    case "WRONG_POSITION":
       return {
         bgColor: "#c9b458", // yellow
         fontColor: "#fff",
       };
-    case "not_in_word":
+    case "NOT_IN_WORD":
       return {
         bgColor: "gray", // dark gray
         fontColor: "#fff",

@@ -8,7 +8,7 @@ describe("evaluateGuess", () => {
 
     const result = evaluateGuess(guess, targetWord);
     expect(result).toEqual<WordleGuessResult[]>(
-      guess.split("").map((char) => ({ char, status: "correct" }))
+      guess.split("").map((char) => ({ char, status: "CORRECT" }))
     );
   });
 
@@ -18,7 +18,7 @@ describe("evaluateGuess", () => {
 
     const result = evaluateGuess(guess, targetWord);
     expect(result).toEqual<WordleGuessResult[]>(
-      guess.split("").map((char) => ({ char, status: "not_in_word" }))
+      guess.split("").map((char) => ({ char, status: "NOT_IN_WORD" }))
     );
   });
 
@@ -28,7 +28,7 @@ describe("evaluateGuess", () => {
 
     const result = evaluateGuess(guess, targetWord);
     expect(result).toEqual<WordleGuessResult[]>(
-      guess.split("").map((char) => ({ char, status: "wrong_position" }))
+      guess.split("").map((char) => ({ char, status: "WRONG_POSITION" }))
     );
   });
 
@@ -38,11 +38,11 @@ describe("evaluateGuess", () => {
 
     const result = evaluateGuess(guess, targetWord);
     expect(result).toEqual<WordleGuessResult[]>([
-      { char: "a", status: "wrong_position" },
-      { char: "d", status: "wrong_position" },
-      { char: "d", status: "not_in_word" },
-      { char: "e", status: "wrong_position" },
-      { char: "r", status: "not_in_word" },
+      { char: "a", status: "WRONG_POSITION" },
+      { char: "d", status: "WRONG_POSITION" },
+      { char: "d", status: "NOT_IN_WORD" },
+      { char: "e", status: "WRONG_POSITION" },
+      { char: "r", status: "NOT_IN_WORD" },
     ]);
   });
 
@@ -52,11 +52,11 @@ describe("evaluateGuess", () => {
 
     const result = evaluateGuess(guess, targetWord);
     expect(result).toEqual<WordleGuessResult[]>([
-      { char: "a", status: "wrong_position" },
-      { char: "d", status: "wrong_position" },
-      { char: "d", status: "wrong_position" },
-      { char: "e", status: "wrong_position" },
-      { char: "r", status: "wrong_position" },
+      { char: "a", status: "WRONG_POSITION" },
+      { char: "d", status: "WRONG_POSITION" },
+      { char: "d", status: "WRONG_POSITION" },
+      { char: "e", status: "WRONG_POSITION" },
+      { char: "r", status: "WRONG_POSITION" },
     ]);
   });
 
@@ -66,11 +66,11 @@ describe("evaluateGuess", () => {
 
     const result = evaluateGuess(guess, targetWord);
     expect(result).toEqual<WordleGuessResult[]>([
-      { char: "s", status: "not_in_word" },
-      { char: "t", status: "not_in_word" },
-      { char: "e", status: "wrong_position" },
-      { char: "a", status: "wrong_position" },
-      { char: "d", status: "wrong_position" },
+      { char: "s", status: "NOT_IN_WORD" },
+      { char: "t", status: "NOT_IN_WORD" },
+      { char: "e", status: "WRONG_POSITION" },
+      { char: "a", status: "WRONG_POSITION" },
+      { char: "d", status: "WRONG_POSITION" },
     ]);
   });
 
@@ -80,11 +80,11 @@ describe("evaluateGuess", () => {
 
     const result = evaluateGuess(guess, targetWord);
     expect(result).toEqual<WordleGuessResult[]>([
-      { char: "a", status: "wrong_position" },
-      { char: "d", status: "wrong_position" },
-      { char: "d", status: "correct" },
-      { char: "e", status: "not_in_word" },
-      { char: "r", status: "not_in_word" },
+      { char: "a", status: "WRONG_POSITION" },
+      { char: "d", status: "WRONG_POSITION" },
+      { char: "d", status: "CORRECT" },
+      { char: "e", status: "NOT_IN_WORD" },
+      { char: "r", status: "NOT_IN_WORD" },
     ]);
   });
 
@@ -94,11 +94,11 @@ describe("evaluateGuess", () => {
 
     const result = evaluateGuess(guess, targetWord);
     expect(result).toEqual<WordleGuessResult[]>([
-      { char: "a", status: "wrong_position" },
-      { char: "d", status: "not_in_word" },
-      { char: "d", status: "correct" },
-      { char: "e", status: "correct" },
-      { char: "r", status: "correct" },
+      { char: "a", status: "WRONG_POSITION" },
+      { char: "d", status: "NOT_IN_WORD" },
+      { char: "d", status: "CORRECT" },
+      { char: "e", status: "CORRECT" },
+      { char: "r", status: "CORRECT" },
     ]);
   });
 
@@ -108,11 +108,11 @@ describe("evaluateGuess", () => {
 
     const result = evaluateGuess(guess, targetWord);
     expect(result).toEqual<WordleGuessResult[]>([
-      { char: "j", status: "not_in_word" },
-      { char: "a", status: "correct" },
-      { char: "d", status: "correct" },
-      { char: "e", status: "correct" },
-      { char: "d", status: "not_in_word" },
+      { char: "j", status: "NOT_IN_WORD" },
+      { char: "a", status: "CORRECT" },
+      { char: "d", status: "CORRECT" },
+      { char: "e", status: "CORRECT" },
+      { char: "d", status: "NOT_IN_WORD" },
     ]);
   });
 });

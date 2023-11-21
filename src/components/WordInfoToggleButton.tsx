@@ -36,7 +36,7 @@ export const WordInfoToggleButton: FC<WordInfoToggleButtonProps> = ({
       <CharSquare
         guessResult={{
           char: wordInfo.word,
-          status: isWin ? "correct" : "not_in_word",
+          status: isWin ? "CORRECT" : "NOT_IN_WORD",
         }}
         textTransform="uppercase"
         width="fit-content"

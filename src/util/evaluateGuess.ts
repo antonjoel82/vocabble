@@ -36,7 +36,7 @@ export const evaluateGuess = (
       if (guessChar !== targetWord.charAt(guessCharIndex)) {
         return {
           char: guessChar,
-          status: "not_in_word",
+          status: "NOT_IN_WORD",
         };
       }
 
@@ -49,7 +49,7 @@ export const evaluateGuess = (
 
       return {
         char: guessChar,
-        status: "correct",
+        status: "CORRECT",
       };
     });
 
@@ -58,7 +58,7 @@ export const evaluateGuess = (
 
     // if the status is already marked as correct or there are no remaining matches,
     // just use the existing result
-    if (existingResult.status === "correct" || matchingIndices.length === 0) {
+    if (existingResult.status === "CORRECT" || matchingIndices.length === 0) {
       return existingResult;
     }
 
@@ -72,7 +72,7 @@ export const evaluateGuess = (
     // in the correct spot; thus, it's wrong_position
     return {
       ...existingResult,
-      status: "wrong_position",
+      status: "WRONG_POSITION",
     };
   });
 };

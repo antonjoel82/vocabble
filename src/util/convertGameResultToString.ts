@@ -11,7 +11,7 @@ export const convertGameResultToString = (
   const guessLimit = board.length;
 
   const winningGuessIndex = board.findIndex((row) =>
-    row.every(({ status }) => status === "correct")
+    row.every(({ status }) => status === "CORRECT")
   );
 
   return `${APP_NAME} ${boardUid} ${

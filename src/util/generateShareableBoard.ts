@@ -6,11 +6,11 @@ export const generateShareableBoard = (board: BoardResults) => {
       return guess
         .map(({ status }) => {
           switch (status) {
-            case "correct":
+            case "CORRECT":
               return "🟩";
-            case "wrong_position":
+            case "WRONG_POSITION":
               return "🟨";
-            case "not_in_word":
+            case "NOT_IN_WORD":
               return "⬜";
             default:
               return null;
