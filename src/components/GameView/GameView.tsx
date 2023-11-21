@@ -1,12 +1,15 @@
 import * as React from "react";
 import { Board, BoardResults } from "../Board";
-import { evaluateGuess } from "../../util/evaluateGuess";
 import { Container } from "../Container";
 import { WordleKeyboard } from "../keyboard/WordleKeyboard";
-import { validateChar } from "../../util/validateChar";
 import { produce } from "immer";
 import { Box, useClipboard, useDisclosure, useToast } from "@chakra-ui/react";
-import { convertGameResultToString } from "../../util";
+import {
+  convertGameResultToString,
+  evaluateGuess,
+  getEmptyBoard,
+  validateChar,
+} from "../../util";
 import { GameOverModal } from "../GameOverModal";
 import { GameOverActionBar } from "../GameOverActionBar";
 import { useCallback } from "react";
@@ -19,7 +22,6 @@ import {
   KEYBOARD_HEIGHT_CHAKRA,
   SIDEBAR_WIDTH_CHAKRA,
 } from "../../config/style.const";
-import { getEmptyBoard } from "src/util/getEmptyBoard";
 import { useGameState } from "./useGameState";
 
 export type CharGuessStatus = "CORRECT" | "WRONG_POSITION" | "NOT_IN_WORD";
