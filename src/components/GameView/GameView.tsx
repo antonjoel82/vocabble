@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Board, BoardResults } from "../Board";
 import { Container } from "../Container";
-import { WordleKeyboard } from "../keyboard/WordleKeyboard";
+import { WordleKeyboard, useOnScreenKeyboard } from "../keyboard";
 import { produce } from "immer";
 import { Box, useClipboard, useDisclosure, useToast } from "@chakra-ui/react";
 import {
@@ -24,11 +24,6 @@ import {
 } from "../../config/style.const";
 import { useGameState } from "./useGameState";
 
-export type CharGuessStatus = "CORRECT" | "WRONG_POSITION" | "NOT_IN_WORD";
-export interface KeyStatusMap {
-  [keyChar: string]: CharGuessStatus;
-}
-
 export interface GameViewProps {
   guessLimit: number;
   targetWordInfo: WordInfo;
@@ -45,9 +40,11 @@ export const GameView: React.FC<GameViewProps> = ({
   const [board, setBoard] = React.useState<BoardResults>(
     getEmptyBoard(guessLimit, targetWordInfo.word.length)
   );
-  const [keyStatusMap, setKeyStatusMap] = React.useState<KeyStatusMap>({});
 
   const { gameState, setGameState } = useGameState();
+
+  const { keyStatusMap, updateKeyboardGuesses, resetKeyboardGuesses } =
+    useOnScreenKeyboard();
 
   const toast = useToast();
   const router = useRouter();
@@ -74,7 +71,7 @@ export const GameView: React.FC<GameViewProps> = ({
     setCurrentGuessCount(0);
     setGameState("ACTIVE");
     setBoard(getEmptyBoard(guessLimit, targetWordInfo.word.length));
-    setKeyStatusMap({});
+    resetKeyboardGuesses();
   }, [guessLimit, targetWordInfo]);
 
   React.useEffect(() => {
@@ -149,21 +146,8 @@ export const GameView: React.FC<GameViewProps> = ({
     });
     setBoard(updatedBoard);
 
-    // Update keyboard status map
-    const updatedKeyStatusMap = produce(keyStatusMap, (draft) => {
-      for (const { char, status } of guessResults) {
-        const previousKeyStatus = draft[char];
-
-        draft[char] =
-          previousKeyStatus === "CORRECT" || status === "CORRECT"
-            ? "CORRECT"
-            : previousKeyStatus === "WRONG_POSITION" ||
-              status === "WRONG_POSITION"
-            ? "WRONG_POSITION"
-            : status;
-      }
-    });
-    setKeyStatusMap(updatedKeyStatusMap);
+    // Update keyboard keys with the latest guess
+    updateKeyboardGuesses(guessResults);
 
     if (guessResults.every(({ status }) => status === "CORRECT")) {
       setGameState("WON");
