@@ -69,8 +69,6 @@ export const GameView: React.FC<GameViewProps> = ({
   const { onCopy } = useClipboard(boardString);
 
   const resetGame = useCallback(() => {
-    // console.log("resetGame");
-
     setCurrentGuessCount(0);
     setGameState("ACTIVE");
     setBoard(getEmptyBoard(guessLimit, targetWordInfo.word.length));
@@ -92,12 +90,7 @@ export const GameView: React.FC<GameViewProps> = ({
       .trim();
   };
 
-  // React.useEffect(() => {
-  //   console.log("Board changed", board);
-  // }, [board]);
-
   const handleAddChar = (char: string) => {
-    // console.log("handleAddChar", char, board);
     if (currentGuessCount >= guessLimit) {
       console.warn("You've already exceeded the allowed number of guesses");
       return;
@@ -117,8 +110,6 @@ export const GameView: React.FC<GameViewProps> = ({
       );
       return;
     }
-
-    // console.log({ rowBeingUpdated, emptyIndex });
 
     const updatedBoard = produce(board, (draft) => {
       draft[currentGuessCount][emptyIndex].char = char;
@@ -150,8 +141,6 @@ export const GameView: React.FC<GameViewProps> = ({
 
     setCurrentGuessCount((curGuessCount) => curGuessCount + 1);
 
-    // console.logs("Evaluated result", { guess, targetWordInfo, guessResults });
-
     // Update the board state
     const updatedBoard = produce(board, (draft) => {
       draft[currentGuessCount] = guessResults;
@@ -182,7 +171,6 @@ export const GameView: React.FC<GameViewProps> = ({
   const handleSubmit = () => {
     const guess = getCurrentGuess();
 
-    // console.log("handleSubmit", { guess });
     if (guess.length !== targetWordInfo.word.length) {
       toast({
         title: "Invalid Word Length",
@@ -239,7 +227,6 @@ export const GameView: React.FC<GameViewProps> = ({
     resetGame();
     closeGameOverModal();
     // Force server-side prop refresh
-
     if (router.asPath.includes(BOARD_UID_PATH)) {
       const queryParams = new URLSearchParams({
         guesses: String(guessLimit),
