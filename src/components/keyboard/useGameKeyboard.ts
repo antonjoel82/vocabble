@@ -3,7 +3,7 @@ import { WordleGuessResult } from "src/types";
 import { produce } from "immer";
 import { KeyStatusMap } from "./KeyStatusMap";
 
-export const useOnScreenKeyboard = () => {
+export const useGameKeyboard = () => {
   const [keyStatusMap, setKeyStatusMap] = React.useState<KeyStatusMap>({});
 
   const updateKeyboardGuesses = (guessResults: WordleGuessResult[]) => {

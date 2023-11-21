@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Board, BoardResults } from "../Board";
 import { Container } from "../Container";
-import { WordleKeyboard, useOnScreenKeyboard } from "../keyboard";
+import { GameKeyboard, useGameKeyboard } from "../keyboard";
 import { produce } from "immer";
 import { Box, useClipboard, useDisclosure, useToast } from "@chakra-ui/react";
 import {
@@ -44,7 +44,7 @@ export const GameView: React.FC<GameViewProps> = ({
   const { gameState, setGameState } = useGameState();
 
   const { keyStatusMap, updateKeyboardGuesses, resetKeyboardGuesses } =
-    useOnScreenKeyboard();
+    useGameKeyboard();
 
   const toast = useToast();
   const router = useRouter();
@@ -256,7 +256,7 @@ export const GameView: React.FC<GameViewProps> = ({
         // needs offset for open menu
         pr={{ base: 0, md: SIDEBAR_WIDTH_CHAKRA }}
       >
-        <WordleKeyboard
+        <GameKeyboard
           keyStatusMap={keyStatusMap}
           canBackspace={getCurrentGuess().length > 0 || gameState !== "ACTIVE"}
           canSubmit={

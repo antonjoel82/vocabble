@@ -1,2 +1,2 @@
-export * from "./WordleKeyboard";
-export * from "./useOnScreenKeyboard";
+export * from "./GameKeyboard";
+export * from "./useGameKeyboard";
