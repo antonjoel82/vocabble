@@ -1,12 +1,12 @@
 import { GetServerSideProps, NextPage } from "next";
 import { getWordInfo } from "src/api";
 import { parseBoardUid } from "src/util/server";
-import { WordleGame, WordleGameProps } from "../../components/WordleGame";
+import { GameView, GameViewProps } from "../../components/GameView";
 
-export type WordlePageProps = WordleGameProps;
+export type WordlePageProps = GameViewProps;
 
 const Page: NextPage<WordlePageProps> = (wordleGameProps) => {
-  return <WordleGame {...wordleGameProps} />;
+  return <GameView {...wordleGameProps} />;
 };
 
 export const getServerSideProps: GetServerSideProps<WordlePageProps> = async ({

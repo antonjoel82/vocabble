@@ -1,3 +1,3 @@
-import { CharGuessStatus } from "../WordleGame";
+import { CharGuessStatus } from "../GameView";
 
 export type KeyStatus = "default" | CharGuessStatus;

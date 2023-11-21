@@ -1,12 +1,12 @@
 import { GetServerSideProps, NextPage } from "next";
 import { WordlePageProps } from "./index";
-import { WordleGame } from "../components/WordleGame";
+import { GameView } from "../components/GameView";
 import { getRandomWordInfoForLength } from "src/api";
 import { DEFAULT_GUESS_LIMIT, DEFAULT_WORD_LENGTH } from "src/config";
 import { createBoardUid } from "src/util/server";
 
 const Page: NextPage<WordlePageProps> = (pageProps) => {
-  return <WordleGame {...pageProps} />;
+  return <GameView {...pageProps} />;
 };
 
 export const getServerSideProps: GetServerSideProps<

@@ -1,24 +1,24 @@
 import * as React from "react";
-import { Board, BoardResults } from "../components/Board";
-import { evaluateGuess } from "../util/evaluateGuess";
-import { Container } from "./Container";
-import { WordleKeyboard } from "./keyboard/WordleKeyboard";
-import { validateChar } from "../util/validateChar";
+import { Board, BoardResults } from "../Board";
+import { evaluateGuess } from "../../util/evaluateGuess";
+import { Container } from "../Container";
+import { WordleKeyboard } from "../keyboard/WordleKeyboard";
+import { validateChar } from "../../util/validateChar";
 import { produce } from "immer";
 import { Box, useClipboard, useDisclosure, useToast } from "@chakra-ui/react";
-import { convertGameResultToString } from "../util";
-import { GameOverModal } from "./GameOverModal";
-import { GameOverActionBar } from "./GameOverActionBar";
+import { convertGameResultToString } from "../../util";
+import { GameOverModal } from "../GameOverModal";
+import { GameOverActionBar } from "../GameOverActionBar";
 import { useCallback } from "react";
-import { APP_BASE_URL } from "src/config";
 import { useRouter } from "next/router";
-import { BOARD_UID_PATH } from "src/layout/MainLayout";
-import { WordInfo } from "src/types";
-import { validateWord } from "src/api";
+import { APP_BASE_URL } from "../../config";
+import { BOARD_UID_PATH } from "../../layout/MainLayout";
+import { WordInfo } from "../../types";
+import { validateWord } from "../../api";
 import {
   KEYBOARD_HEIGHT_CHAKRA,
   SIDEBAR_WIDTH_CHAKRA,
-} from "src/config/style.const";
+} from "../../config/style.const";
 
 export type CharGuessStatus = "correct" | "wrong_position" | "not_in_word";
 export type GameState = "active" | "fail" | "win";
@@ -26,7 +26,7 @@ export interface KeyStatusMap {
   [keyChar: string]: CharGuessStatus;
 }
 
-export interface WordleGameProps {
+export interface GameViewProps {
   guessLimit: number;
   targetWordInfo: WordInfo;
   boardUid: string;
@@ -37,7 +37,7 @@ const getEmptyBoard = (guessLimit: number, wordLength: number) => {
   return board;
 };
 
-export const WordleGame: React.FC<WordleGameProps> = ({
+export const GameView: React.FC<GameViewProps> = ({
   guessLimit,
   targetWordInfo,
   boardUid,
