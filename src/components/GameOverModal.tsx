@@ -44,64 +44,61 @@ export const GameOverModal: React.FC<GameOverModalProps> = React.memo(
     );
 
     return (
-      <>
-        <Modal
-          blockScrollOnMount={false}
-          isOpen={isOpen}
-          onClose={onClose}
-          isCentered
-          onEsc={onClose}
-        >
-          <ModalOverlay />
-          <ModalContent m={4} pt={4} maxWidth="100vw" maxHeight="94vh">
-            <ModalHeader display="flex" justifyContent="center" pb={1}>
-              <Heading>{isWin ? "You Win!" : "You Lose!"}</Heading>
-            </ModalHeader>
-            <ModalCloseButton />
-            <ModalBody
-              display="flex"
-              alignItems="center"
-              flexDirection="column"
-              rowGap={3}
-            >
-              <Text textAlign="center" fontStyle="italic">
-                {gameOverMessage}
-              </Text>
-              <Text textAlign="center">The word was</Text>
-              <WordInfoToggleButton
-                isWin={isWin}
-                wordInfo={targetWordInfo}
-                toggleLabel={`Click to ${
-                  shouldShowDefinition ? "hide" : "show"
-                } definition(s)`}
-                onClick={handleToggle}
-                mb={2}
-              />
-              <Collapse in={shouldShowDefinition}>
-                <Box
-                  border={"2px"}
-                  borderStyle="solid"
-                  p={2}
-                  px={3}
-                  borderColor="gray"
-                  overflowY="scroll"
-                  maxHeight="40vh"
-                >
-                  <Text wordBreak="break-word">
-                    {targetWordInfo.definition}
-                  </Text>
-                </Box>
-              </Collapse>
-            </ModalBody>
-            <ModalFooter justifyContent={"center"}>
-              <GameOverActionBar
-                handlePrimaryClick={handlePrimaryClick}
-                handleSecondaryClick={handleSecondaryClick}
-              />
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      </>
+      <Modal
+        blockScrollOnMount={false}
+        isOpen={isOpen}
+        onClose={onClose}
+        isCentered
+        onEsc={onClose}
+        size={"sm"}
+      >
+        <ModalOverlay />
+        <ModalContent m={4} pt={4}>
+          <ModalHeader display="flex" justifyContent="center" pb={1}>
+            <Heading>{isWin ? "You Win!" : "You Lose!"}</Heading>
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody
+            display="flex"
+            alignItems="center"
+            flexDirection="column"
+            rowGap={3}
+          >
+            <Text textAlign="center" fontStyle="italic">
+              {gameOverMessage}
+            </Text>
+            <Text textAlign="center">The word was</Text>
+            <WordInfoToggleButton
+              isWin={isWin}
+              wordInfo={targetWordInfo}
+              toggleLabel={`Click to ${
+                shouldShowDefinition ? "hide" : "show"
+              } definition(s)`}
+              onClick={handleToggle}
+              mb={2}
+            />
+            <Collapse in={shouldShowDefinition}>
+              <Box
+                border={"2px"}
+                borderStyle="solid"
+                p={2}
+                px={3}
+                borderColor="gray"
+                overflowY="scroll"
+                maxHeight="40vh"
+              >
+                <Text wordBreak="break-word">{targetWordInfo.definition}</Text>
+              </Box>
+            </Collapse>
+          </ModalBody>
+          <ModalFooter justifyContent={"center"}>
+            <GameOverActionBar
+              handlePrimaryClick={handlePrimaryClick}
+              handleSecondaryClick={handleSecondaryClick}
+            />
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     );
   }
 );
