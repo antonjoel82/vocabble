@@ -18,17 +18,14 @@ export const useDeviceKeyboard = ({
 
       switch (keyType) {
         case "letter":
-          console.log(`Handling a letter key press!`);
           handleAddChar(key);
           return;
         case "enter":
-          console.log(`Handling a enter key press!`);
           if (canSubmit) {
             handleSubmit();
           }
           return;
         case "backspace":
-          console.log(`Handling a backspace key press!`);
           if (canBackspace) {
             handleBackspace();
           }
@@ -39,10 +36,6 @@ export const useDeviceKeyboard = ({
     },
     [handleAddChar, handleBackspace, handleSubmit, canBackspace, canSubmit]
   );
-
-  useEffect(() => {
-    console.log("Keyboard MOUNTING");
-  }, []);
 
   useEffect(() => {
     document.addEventListener("keydown", handleUserKeyPress);

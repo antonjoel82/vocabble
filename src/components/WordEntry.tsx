@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 
 interface WordEntryProps {
   maxLength: number;
@@ -14,12 +14,8 @@ export const WordEntry: React.FC<WordEntryProps> = ({
   const inputRef = React.useRef(null);
 
   const handleSubmit = (guess: string) => {
-    if (guess.length !== maxLength) {
-      alert(`Word must be ${maxLength} characters long!`);
-      return;
-    }
     submitGuess(guess.toLocaleLowerCase());
-    inputRef.current.value = '';
+    inputRef.current.value = "";
   };
 
   return (
@@ -30,8 +26,7 @@ export const WordEntry: React.FC<WordEntryProps> = ({
       maxLength={maxLength}
       onSubmit={({ currentTarget }) => handleSubmit(currentTarget.value)}
       onKeyDown={({ key, currentTarget }) => {
-        if (key === 'Enter') {
-          // console.log('Enter pressed');
+        if (key === "Enter") {
           handleSubmit(currentTarget.value);
         }
       }}
