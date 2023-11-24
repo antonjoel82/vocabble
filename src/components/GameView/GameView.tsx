@@ -115,11 +115,6 @@ export const GameView: React.FC<GameViewProps> = ({
         });
         return;
       }
-
-      console.log(
-        `Updating board with ${char}, and guess`,
-        selectCurrentGuess()
-      );
       const updatedBoard = produce(board, (draft) => {
         draft[currentGuessCount][emptyIndex].char = char.toLocaleLowerCase();
       });

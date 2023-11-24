@@ -10,11 +10,8 @@ const Page: NextPage<WordlePageProps> = (wordleGameProps) => {
 };
 
 export const getServerSideProps: GetServerSideProps<WordlePageProps> = async ({
-  req,
   query,
 }) => {
-  console.log(req.url);
-
   const boardUid = Array.isArray(query.boardUid)
     ? query.boardUid[0]
     : query.boardUid;
