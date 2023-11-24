@@ -28,6 +28,7 @@ export interface GameOverModalProps
 export const GameOverModal: React.FC<GameOverModalProps> = React.memo(
   ({
     hasWon: isWin,
+    hasCopied,
     onClose,
     isOpen,
     handlePrimaryClick,
@@ -95,6 +96,7 @@ export const GameOverModal: React.FC<GameOverModalProps> = React.memo(
             <GameOverActionBar
               handlePrimaryClick={handlePrimaryClick}
               handleSecondaryClick={handleSecondaryClick}
+              hasCopied={hasCopied}
             />
           </ModalFooter>
         </ModalContent>

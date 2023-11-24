@@ -14,7 +14,6 @@ import { GameOverModal } from "../GameOverModal";
 import { GameOverActionBar } from "../GameOverActionBar";
 import { useCallback } from "react";
 import { useRouter } from "next/router";
-import { APP_BASE_URL } from "../../config";
 import { BOARD_UID_PATH } from "../../layout/MainLayout";
 import { WordInfo } from "../../types";
 import { validateWord } from "../../api";
@@ -24,6 +23,9 @@ import {
 } from "../../config/style.const";
 import { useGameState } from "../../hooks/useGameState";
 import { useDeviceKeyboard } from "src/hooks/useDeviceKeyboard";
+
+/** Time before clipboard "hasCopied" state resets */
+const CLIPBOARD_TIMEOUT_MS = 5000;
 
 export interface GameViewProps {
   guessLimit: number;
@@ -60,12 +62,14 @@ export const GameView: React.FC<GameViewProps> = ({
       convertGameResultToString(
         board,
         boardUid,
-        APP_BASE_URL // TODO, determine how to handle the URL
+        process.env.NEXT_PUBLIC_APP_URL
       ),
     [board, boardUid]
   );
 
-  const { onCopy, hasCopied } = useClipboard(boardString);
+  const { onCopy, hasCopied } = useClipboard(boardString, {
+    timeout: CLIPBOARD_TIMEOUT_MS,
+  });
 
   const resetGame = useCallback(() => {
     setCurrentGuessCount(0);

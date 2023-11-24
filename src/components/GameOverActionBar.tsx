@@ -1,5 +1,4 @@
-import { Flex, Button, ButtonProps } from "@chakra-ui/react";
-import styled from "@emotion/styled";
+import { Flex, Button } from "@chakra-ui/react";
 import React, { FC } from "react";
 
 export interface GameOverActionBarProps {
@@ -37,7 +36,7 @@ export const GameOverActionBar: FC<GameOverActionBarProps> = ({
         color="white"
         border="2px solid green"
       >
-        {hasCopied ? "Share" : "Copied!"}
+        {hasCopied ? "Copied!" : "Share"}
       </Button>
     </Flex>
   );
