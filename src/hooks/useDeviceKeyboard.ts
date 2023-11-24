@@ -18,7 +18,7 @@ export const useDeviceKeyboard = ({
 
       switch (keyType) {
         case "letter":
-          handleAddChar(key);
+          handleAddChar(key.toLocaleLowerCase());
           return;
         case "enter":
           if (canSubmit) {

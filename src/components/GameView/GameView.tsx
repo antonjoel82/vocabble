@@ -117,7 +117,7 @@ export const GameView: React.FC<GameViewProps> = ({
       }
 
       const updatedBoard = produce(board, (draft) => {
-        draft[currentGuessCount][emptyIndex].char = char;
+        draft[currentGuessCount][emptyIndex].char = char.toLocaleLowerCase();
       });
 
       setBoard(updatedBoard);
