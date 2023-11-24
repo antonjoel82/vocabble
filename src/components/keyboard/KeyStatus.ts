@@ -1,3 +1,3 @@
-import { CharGuessStatus } from "../GameView";
+import { CharGuessStatus } from "src/types";
 
 export type KeyStatus = "default" | CharGuessStatus;
