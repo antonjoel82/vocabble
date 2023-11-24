@@ -1,8 +1,7 @@
 import * as React from "react";
 import styled from "@emotion/styled";
 import { Box, BoxProps } from "@chakra-ui/react";
-import { CharGuessStatus } from "./GameView";
-import { WordleGuessResult } from "src/types";
+import { CharGuessStatus, WordleGuessResult } from "src/types";
 
 const getColorsByStatus = (
   status?: CharGuessStatus
