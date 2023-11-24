@@ -105,9 +105,14 @@ export const GameView: React.FC<GameViewProps> = ({
       const emptyIndex = rowBeingUpdated.findIndex(({ char }) => !char);
 
       if (emptyIndex === -1 || emptyIndex >= targetWordInfo.word.length) {
-        alert(
-          `You cannot guess more than ${targetWordInfo.word.length} characters.`
-        );
+        toast({
+          title: "Invalid Guess Length",
+          description: `You cannot guess more than ${targetWordInfo.word.length} characters.`,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+          position: "top",
+        });
         return;
       }
 
@@ -139,6 +144,18 @@ export const GameView: React.FC<GameViewProps> = ({
   };
 
   const submitGuess = (guess: string) => {
+    if (guess.length !== targetWordInfo.word.length) {
+      toast({
+        title: "Invalid Word Length",
+        description: `You may only guess ${targetWordInfo.word.length} letter words.`,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+        position: "top",
+      });
+      return;
+    }
+
     const guessResults = evaluateGuess(guess, targetWordInfo.word);
 
     setCurrentGuessCount((curGuessCount) => curGuessCount + 1);
@@ -186,10 +203,6 @@ export const GameView: React.FC<GameViewProps> = ({
 
     submitGuess(guess);
   };
-
-  React.useEffect(() => {
-    console.log("Board changed", JSON.stringify(board[0], null, 2));
-  }, [board]);
 
   React.useEffect(() => {
     if (currentGuessCount >= guessLimit && gameState !== "WON") {
