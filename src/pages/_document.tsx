@@ -1,6 +1,5 @@
 import NextDocument, { Html, Head, Main, NextScript } from "next/document";
 import { ColorModeScript } from "@chakra-ui/react";
-import { APP_NAME } from "src/layout/MainLayout";
 
 export default class Document extends NextDocument {
   render() {
@@ -24,6 +23,7 @@ export default class Document extends NextDocument {
             content="Word game with variable board sizes."
           />
           <meta property="og:image" content={"/vocabble.png"} />
+          <meta property="og:locale" content={"en_US"} />
         </Head>
         <body>
           {/* Make Color mode to persists when you refresh the page. */}
