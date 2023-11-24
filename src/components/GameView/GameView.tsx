@@ -227,6 +227,14 @@ export const GameView: React.FC<GameViewProps> = ({
 
   const handleShareClick = useCallback(() => {
     onCopy();
+    toast({
+      title: "Copied to Clipboard!",
+      description: `Copied your results and a shareable puzzle link to your clipboard.`,
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+      position: "top",
+    });
   }, [onCopy]);
 
   const handleResetClick = useCallback(() => {
