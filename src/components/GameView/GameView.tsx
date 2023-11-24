@@ -22,7 +22,8 @@ import {
   KEYBOARD_HEIGHT_CHAKRA,
   SIDEBAR_WIDTH_CHAKRA,
 } from "../../config/style.const";
-import { useGameState } from "./useGameState";
+import { useGameState } from "../../hooks/useGameState";
+import { useDeviceKeyboard } from "src/hooks/useDeviceKeyboard";
 
 export interface GameViewProps {
   guessLimit: number;
@@ -35,7 +36,6 @@ export const GameView: React.FC<GameViewProps> = ({
   targetWordInfo,
   boardUid,
 }) => {
-  // const [targetWordInfo, setTargetWord] = React.useState<string>("");
   const [currentGuessCount, setCurrentGuessCount] = React.useState<number>(0);
   const [board, setBoard] = React.useState<BoardResults>(
     getEmptyBoard(guessLimit, targetWordInfo.word.length)
@@ -78,7 +78,7 @@ export const GameView: React.FC<GameViewProps> = ({
     resetGame();
   }, [guessLimit, targetWordInfo]);
 
-  const getCurrentGuess = () => {
+  const selectCurrentGuess = () => {
     if (currentGuessCount >= guessLimit) {
       return "";
     }
@@ -89,33 +89,36 @@ export const GameView: React.FC<GameViewProps> = ({
       .trim();
   };
 
-  const handleAddChar = (char: string) => {
-    if (currentGuessCount >= guessLimit) {
-      console.warn("You've already exceeded the allowed number of guesses");
-      return;
-    }
+  const handleAddChar = useCallback(
+    (char: string) => {
+      if (currentGuessCount >= guessLimit) {
+        console.warn("You've already exceeded the allowed number of guesses");
+        return;
+      }
 
-    if (!validateChar(char)) {
-      console.warn("Illegal character typed!");
-      return;
-    }
+      if (!validateChar(char)) {
+        console.warn("Illegal character typed!");
+        return;
+      }
 
-    const rowBeingUpdated = board[currentGuessCount];
-    const emptyIndex = rowBeingUpdated.findIndex(({ char }) => !char);
+      const rowBeingUpdated = board[currentGuessCount];
+      const emptyIndex = rowBeingUpdated.findIndex(({ char }) => !char);
 
-    if (emptyIndex === -1 || emptyIndex >= targetWordInfo.word.length) {
-      alert(
-        `You cannot guess more than ${targetWordInfo.word.length} characters.`
-      );
-      return;
-    }
+      if (emptyIndex === -1 || emptyIndex >= targetWordInfo.word.length) {
+        alert(
+          `You cannot guess more than ${targetWordInfo.word.length} characters.`
+        );
+        return;
+      }
 
-    const updatedBoard = produce(board, (draft) => {
-      draft[currentGuessCount][emptyIndex].char = char;
-    });
+      const updatedBoard = produce(board, (draft) => {
+        draft[currentGuessCount][emptyIndex].char = char;
+      });
 
-    setBoard(updatedBoard);
-  };
+      setBoard(updatedBoard);
+    },
+    [board, currentGuessCount, setBoard]
+  );
 
   const handleRemoveLastChar = () => {
     const rowBeingUpdated = [...board[currentGuessCount]];
@@ -155,7 +158,7 @@ export const GameView: React.FC<GameViewProps> = ({
   };
 
   const handleSubmit = () => {
-    const guess = getCurrentGuess();
+    const guess = selectCurrentGuess();
 
     if (guess.length !== targetWordInfo.word.length) {
       toast({
@@ -185,6 +188,10 @@ export const GameView: React.FC<GameViewProps> = ({
   };
 
   React.useEffect(() => {
+    console.log("Board changed", JSON.stringify(board[0], null, 2));
+  }, [board]);
+
+  React.useEffect(() => {
     if (currentGuessCount >= guessLimit && gameState !== "WON") {
       setGameState("LOST");
     }
@@ -196,14 +203,15 @@ export const GameView: React.FC<GameViewProps> = ({
     }
   }, [gameState]);
 
-  // useDeviceKeyboard({
-  //   handleAddChar,
-  //   handleBackspace: handleRemoveLastChar,
-  //   handleSubmit,
-  //   canBackspace: getCurrentGuess().length > 0 || gameState !== "ACTIVE",
-  //   canSubmit:
-  //     getCurrentGuess().length === targetWordInfo.word.length || gameState !== "ACTIVE",
-  // });
+  useDeviceKeyboard({
+    handleAddChar,
+    handleBackspace: handleRemoveLastChar,
+    handleSubmit,
+    canBackspace: selectCurrentGuess().length > 0 && gameState === "ACTIVE",
+    canSubmit:
+      selectCurrentGuess().length === targetWordInfo.word.length &&
+      gameState === "ACTIVE",
+  });
 
   const handleShareClick = useCallback(() => {
     onCopy();
@@ -258,9 +266,11 @@ export const GameView: React.FC<GameViewProps> = ({
       >
         <GameKeyboard
           keyStatusMap={keyStatusMap}
-          canBackspace={getCurrentGuess().length > 0 || gameState !== "ACTIVE"}
+          canBackspace={
+            selectCurrentGuess().length > 0 || gameState !== "ACTIVE"
+          }
           canSubmit={
-            getCurrentGuess().length === targetWordInfo.word.length ||
+            selectCurrentGuess().length === targetWordInfo.word.length ||
             gameState !== "ACTIVE"
           }
           handleAddChar={handleAddChar}
