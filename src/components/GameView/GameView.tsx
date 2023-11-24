@@ -102,7 +102,7 @@ export const GameView: React.FC<GameViewProps> = ({
       }
 
       const rowBeingUpdated = board[currentGuessCount];
-      const emptyIndex = rowBeingUpdated.findIndex(({ char }) => !char);
+      const emptyIndex = rowBeingUpdated.findIndex((item) => !item.char);
 
       if (emptyIndex === -1 || emptyIndex >= targetWordInfo.word.length) {
         toast({
@@ -116,6 +116,10 @@ export const GameView: React.FC<GameViewProps> = ({
         return;
       }
 
+      console.log(
+        `Updating board with ${char}, and guess`,
+        selectCurrentGuess()
+      );
       const updatedBoard = produce(board, (draft) => {
         draft[currentGuessCount][emptyIndex].char = char.toLocaleLowerCase();
       });

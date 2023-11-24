@@ -11,6 +11,9 @@ export const useDeviceKeyboard = ({
 }: KeyboardBaseProps) => {
   const handleUserKeyPress = useCallback(
     ({ key }: KeyboardEvent) => {
+      // remove focus from the on-screen keyboard to prevent double behavior when pressing enter
+      (document.activeElement as HTMLButtonElement).blur?.();
+
       const keyType = getDeviceKeyType(key);
       if (!keyType) {
         return;
