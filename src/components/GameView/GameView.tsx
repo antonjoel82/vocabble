@@ -65,7 +65,7 @@ export const GameView: React.FC<GameViewProps> = ({
     [board, boardUid]
   );
 
-  const { onCopy } = useClipboard(boardString);
+  const { onCopy, hasCopied } = useClipboard(boardString);
 
   const resetGame = useCallback(() => {
     setCurrentGuessCount(0);
@@ -269,6 +269,7 @@ export const GameView: React.FC<GameViewProps> = ({
               <GameOverActionBar
                 handlePrimaryClick={handleShareClick}
                 handleSecondaryClick={handleResetClick}
+                hasCopied={hasCopied}
               />
             </Box>
           )}
@@ -303,6 +304,7 @@ export const GameView: React.FC<GameViewProps> = ({
         onClose={closeGameOverModal}
         targetWordInfo={targetWordInfo}
         hasWon={gameState === "WON"}
+        hasCopied={hasCopied}
         handlePrimaryClick={handleShareClick}
         handleSecondaryClick={handleResetClick}
       />

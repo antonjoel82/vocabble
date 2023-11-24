@@ -5,11 +5,13 @@ import React, { FC } from "react";
 export interface GameOverActionBarProps {
   handlePrimaryClick: () => void;
   handleSecondaryClick: () => void;
+  hasCopied: boolean;
 }
 
 export const GameOverActionBar: FC<GameOverActionBarProps> = ({
   handlePrimaryClick,
   handleSecondaryClick,
+  hasCopied,
 }) => {
   return (
     <Flex justifyContent="center" gap={3} width="100%">
@@ -35,7 +37,7 @@ export const GameOverActionBar: FC<GameOverActionBarProps> = ({
         color="white"
         border="2px solid green"
       >
-        Share
+        {hasCopied ? "Share" : "Copied!"}
       </Button>
     </Flex>
   );
