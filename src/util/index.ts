@@ -7,3 +7,4 @@ export * from "./generateShareableBoard";
 export * from "./getBoardUrl";
 export * from "./validateChar";
 export * from "./getEmptyBoard";
+export * from "./getDeviceKeyType";
