@@ -48,7 +48,7 @@ export const getWordInfo = (word: string): WordInfo => {
   };
 };
 
-export const validateWord = (word: string): boolean => {
+export const validateWordInDictionary = (word: string): boolean => {
   if (!word || word.length < MIN_WORD_LENGTH || word.length > MAX_WORD_LENGTH) {
     return false;
   }

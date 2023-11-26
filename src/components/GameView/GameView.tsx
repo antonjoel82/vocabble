@@ -3,7 +3,13 @@ import { Board, BoardResults } from "../Board";
 import { Container } from "../Container";
 import { GameKeyboard, useGameKeyboard } from "../keyboard";
 import { produce } from "immer";
-import { Box, useClipboard, useDisclosure, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  UseToastOptions,
+  useClipboard,
+  useDisclosure,
+  useToast,
+} from "@chakra-ui/react";
 import {
   convertGameResultToString,
   evaluateGuess,
@@ -16,7 +22,7 @@ import { useCallback } from "react";
 import { useRouter } from "next/router";
 import { BOARD_UID_PATH } from "../../layout/MainLayout";
 import { WordInfo } from "../../types";
-import { validateWord } from "../../api";
+import { validateWordInDictionary } from "../../api";
 import {
   KEYBOARD_HEIGHT_CHAKRA,
   SIDEBAR_WIDTH_CHAKRA,
@@ -27,6 +33,12 @@ import { selectCurrentGuess } from "src/selectors";
 
 /** Time before clipboard "hasCopied" state resets */
 const CLIPBOARD_TIMEOUT_MS = 5000;
+
+const DEFAULT_TOAST_SETTINGS: Partial<UseToastOptions> = {
+  duration: 3000,
+  isClosable: true,
+  position: "top",
+};
 
 export interface GameViewProps {
   guessLimit: number;
@@ -49,7 +61,7 @@ export const GameView: React.FC<GameViewProps> = ({
   const { keyStatusMap, updateKeyboardGuesses, resetKeyboardGuesses } =
     useGameKeyboard();
 
-  const toast = useToast();
+  const toast = useToast(DEFAULT_TOAST_SETTINGS);
   const router = useRouter();
 
   const {
@@ -96,10 +108,7 @@ export const GameView: React.FC<GameViewProps> = ({
         toast({
           title: "Invalid Guess Length",
           description: `You cannot guess more than ${targetWordInfo.word.length} characters.`,
-          status: "error",
-          duration: 3000,
-          isClosable: true,
-          position: "top",
+          status: "warning",
         });
         return;
       }
@@ -136,9 +145,6 @@ export const GameView: React.FC<GameViewProps> = ({
         title: "Invalid Word Length",
         description: `You may only guess ${targetWordInfo.word.length} letter words.`,
         status: "error",
-        duration: 3000,
-        isClosable: true,
-        position: "top",
       });
       return;
     }
@@ -168,22 +174,16 @@ export const GameView: React.FC<GameViewProps> = ({
       toast({
         title: "Invalid Word Length",
         description: `You may only guess ${targetWordInfo.word.length} letter words.`,
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-        position: "top",
+        status: "warning",
       });
       return;
     }
 
-    if (!validateWord(guess)) {
+    if (!validateWordInDictionary(guess)) {
       toast({
         title: "Invalid Word",
         description: `Your guess must be defined in the dictionary.`,
         status: "warning",
-        duration: 3000,
-        isClosable: true,
-        position: "top",
       });
       return;
     }
@@ -229,9 +229,6 @@ export const GameView: React.FC<GameViewProps> = ({
       title: "Copied to Clipboard!",
       description: `Copied your results and a shareable puzzle link to your clipboard.`,
       status: "success",
-      duration: 3000,
-      isClosable: true,
-      position: "top",
     });
   }, [onCopy]);
 
