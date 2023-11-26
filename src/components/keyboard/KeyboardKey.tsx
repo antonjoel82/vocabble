@@ -1,35 +1,7 @@
 import { Button, ButtonProps } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { KeyStatus } from "./KeyStatus";
-
-// TODO switch to theme
-const getColorsFromStatus = (
-  status: KeyStatus
-): { bgColor: string; fontColor: string } => {
-  switch (status) {
-    case "CORRECT":
-      return {
-        bgColor: "#6aaa64", // green
-        fontColor: "#fff",
-      };
-    case "WRONG_POSITION":
-      return {
-        bgColor: "#c9b458", // yellow
-        fontColor: "#fff",
-      };
-    case "NOT_IN_WORD":
-      return {
-        bgColor: "#787c7e", // dark gray
-        fontColor: "#fff",
-      };
-    case "default":
-    default:
-      return {
-        bgColor: "#d8d8d8", // light gray
-        fontColor: "#000",
-      };
-  }
-};
+import { getColorsFromStatus } from "src/util";
 
 // TODO use theme, and change font size for desktop
 const KeyboardButton = styled(Button)<ButtonProps & { status: KeyStatus }>(
@@ -86,7 +58,11 @@ export const KeyboardKey: React.FC<KeyboardKeyProps> = ({
   isDisabled,
 }) => {
   return (
-    <KeyboardButton status={status} onClick={handleClick} disabled={isDisabled}>
+    <KeyboardButton
+      status={status}
+      onClick={handleClick}
+      isDisabled={isDisabled}
+    >
       {label}
     </KeyboardButton>
   );

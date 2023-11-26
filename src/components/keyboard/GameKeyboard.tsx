@@ -9,10 +9,12 @@ import { KeyStatusMap } from "./KeyStatusMap";
 
 export interface GameKeyboardProps extends KeyboardBaseProps {
   keyStatusMap: KeyStatusMap;
+  areAllDisabled?: boolean;
 }
 
 export const GameKeyboard: React.FC<GameKeyboardProps> = ({
   keyStatusMap,
+  areAllDisabled,
   handleAddChar,
   handleSubmit,
   handleBackspace,
@@ -23,14 +25,14 @@ export const GameKeyboard: React.FC<GameKeyboardProps> = ({
     label: <FiDelete size="1.5rem" />,
     status: "default",
     handleClick: handleBackspace,
-    isDisabled: !canBackspace,
+    isDisabled: !canBackspace || areAllDisabled,
   };
 
   const enterKeyConfig: KeyboardKeyProps = {
     label: "enter",
     status: "default",
     handleClick: handleSubmit,
-    isDisabled: !canSubmit,
+    isDisabled: !canSubmit || areAllDisabled,
   };
 
   return (
@@ -42,13 +44,13 @@ export const GameKeyboard: React.FC<GameKeyboardProps> = ({
           handleClick: () => {
             handleAddChar(char);
           },
-          isDisabled: false,
+          isDisabled: areAllDisabled,
         }));
 
         // for the bottom row of the keyboard, add control buttons
         if (rowIndex === KEYBOARD_CHARS.length - 1) {
           keyConfigs.unshift(enterKeyConfig); // add on left
-          keyConfigs.push(backspaceKeyConfig); // add on right: ;
+          keyConfigs.push(backspaceKeyConfig); // add on right
         }
 
         return (

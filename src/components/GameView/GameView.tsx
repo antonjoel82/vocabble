@@ -51,18 +51,17 @@ export const GameView: React.FC<GameViewProps> = ({
   targetWordInfo,
   boardUid,
 }) => {
+  const toast = useToast(DEFAULT_TOAST_SETTINGS);
+  const router = useRouter();
+
   const [currentGuessCount, setCurrentGuessCount] = React.useState<number>(0);
   const [board, setBoard] = React.useState<BoardResults>(
     getEmptyBoard(guessLimit, targetWordInfo.word.length)
   );
-
   const { gameStatus, setGameStatus } = useGameStatus();
 
   const { keyStatusMap, updateKeyboardGuesses, resetKeyboardGuesses } =
     useGameKeyboard();
-
-  const toast = useToast(DEFAULT_TOAST_SETTINGS);
-  const router = useRouter();
 
   const {
     isOpen: isGameOverModalOpen,
@@ -91,8 +90,7 @@ export const GameView: React.FC<GameViewProps> = ({
 
   const handleAddChar = useCallback(
     (char: string) => {
-      if (currentGuessCount >= guessLimit) {
-        console.warn("You've already exceeded the allowed number of guesses");
+      if (gameStatus !== "ACTIVE") {
         return;
       }
 
@@ -122,6 +120,10 @@ export const GameView: React.FC<GameViewProps> = ({
   );
 
   const handleRemoveLastChar = () => {
+    if (gameStatus !== "ACTIVE") {
+      return;
+    }
+
     const updatedBoard = produce(board, (draft) => {
       const rowBeingUpdated = Array.from(draft[currentGuessCount]);
       const lastCharIndex =
@@ -139,19 +141,11 @@ export const GameView: React.FC<GameViewProps> = ({
     setBoard(updatedBoard);
   };
 
+  /**
+   * @precondition expects guess to be validated
+   */
   const submitGuess = (guess: string) => {
-    if (guess.length !== targetWordInfo.word.length) {
-      toast({
-        title: "Invalid Word Length",
-        description: `You may only guess ${targetWordInfo.word.length} letter words.`,
-        status: "error",
-      });
-      return;
-    }
-
     const guessResults = evaluateGuess(guess, targetWordInfo.word);
-
-    setCurrentGuessCount((curGuessCount) => curGuessCount + 1);
 
     // Update the board state
     const updatedBoard = produce(board, (draft) => {
@@ -162,18 +156,26 @@ export const GameView: React.FC<GameViewProps> = ({
     // Update keyboard keys with the latest guess
     updateKeyboardGuesses(guessResults);
 
+    const updatedGuessCount = currentGuessCount + 1;
+    setCurrentGuessCount(updatedGuessCount);
     if (guessResults.every(({ status }) => status === "CORRECT")) {
       setGameStatus("WON");
+    } else if (updatedGuessCount >= guessLimit) {
+      setGameStatus("LOST");
     }
   };
 
   const handleSubmit = () => {
+    if (gameStatus !== "ACTIVE") {
+      return;
+    }
+
     const guess = selectCurrentGuess({ board, currentGuessCount });
 
     if (guess.length !== targetWordInfo.word.length) {
       toast({
         title: "Invalid Word Length",
-        description: `You may only guess ${targetWordInfo.word.length} letter words.`,
+        description: `You may only guess ${targetWordInfo.word.length}-letter words.`,
         status: "warning",
       });
       return;
@@ -190,12 +192,6 @@ export const GameView: React.FC<GameViewProps> = ({
 
     submitGuess(guess);
   };
-
-  React.useEffect(() => {
-    if (currentGuessCount >= guessLimit && gameStatus !== "WON") {
-      setGameStatus("LOST");
-    }
-  }, [currentGuessCount]);
 
   React.useEffect(() => {
     if (gameStatus !== "ACTIVE") {
@@ -283,14 +279,15 @@ export const GameView: React.FC<GameViewProps> = ({
         <GameKeyboard
           keyStatusMap={keyStatusMap}
           canBackspace={
-            gameStatus !== "ACTIVE" &&
+            gameStatus === "ACTIVE" &&
             selectCurrentGuess({ board, currentGuessCount }).length > 0
           }
           canSubmit={
-            gameStatus !== "ACTIVE" &&
+            gameStatus === "ACTIVE" &&
             selectCurrentGuess({ board, currentGuessCount }).length ===
               targetWordInfo.word.length
           }
+          areAllDisabled={gameStatus !== "ACTIVE"}
           handleAddChar={handleAddChar}
           handleBackspace={handleRemoveLastChar}
           handleSubmit={handleSubmit}

@@ -9,8 +9,14 @@ export interface KeyboardRowProps {
 export const KeyboardRow: React.FC<KeyboardRowProps> = ({ keyConfigs }) => {
   return (
     <Flex justifyContent="center" gap={1}>
-      {keyConfigs.map((keyProps, index) => (
-        <KeyboardKey key={`key-${index}`} {...keyProps} />
+      {keyConfigs.map(({ label, status, handleClick, isDisabled }, index) => (
+        <KeyboardKey
+          key={`key-${index}`}
+          label={label}
+          status={status}
+          handleClick={handleClick}
+          isDisabled={isDisabled}
+        />
       ))}
     </Flex>
   );
