@@ -113,17 +113,17 @@ export const GameView: React.FC<GameViewProps> = ({
   );
 
   const handleRemoveLastChar = () => {
-    const rowBeingUpdated = [...board[currentGuessCount]];
-    const lastCharIndex =
-      rowBeingUpdated.length -
-      1 -
-      rowBeingUpdated.reverse().findIndex(({ char }) => !!char);
-
-    if (lastCharIndex >= targetWordInfo.word.length) {
-      return;
-    }
-
     const updatedBoard = produce(board, (draft) => {
+      const rowBeingUpdated = Array.from(draft[currentGuessCount]);
+      const lastCharIndex =
+        rowBeingUpdated.length -
+        1 -
+        rowBeingUpdated.reverse().findIndex(({ char }) => !!char);
+
+      if (lastCharIndex >= targetWordInfo.word.length) {
+        return;
+      }
+
       draft[currentGuessCount][lastCharIndex] = {};
     });
 
