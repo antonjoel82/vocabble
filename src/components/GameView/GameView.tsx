@@ -57,17 +57,11 @@ export const GameView: React.FC<GameViewProps> = ({
     onOpen: openGameOverModal,
   } = useDisclosure();
 
-  const boardString = React.useMemo(
-    () =>
-      convertGameResultToString(
-        board,
-        boardUid,
-        process.env.NEXT_PUBLIC_APP_URL
-      ),
-    [board, boardUid]
-  );
-
-  const { onCopy, hasCopied } = useClipboard(boardString, {
+  const {
+    onCopy,
+    hasCopied,
+    setValue: setClipboardValue,
+  } = useClipboard(undefined, {
     timeout: CLIPBOARD_TIMEOUT_MS,
   });
 
@@ -215,6 +209,13 @@ export const GameView: React.FC<GameViewProps> = ({
 
   React.useEffect(() => {
     if (gameState !== "ACTIVE") {
+      setClipboardValue(
+        convertGameResultToString(
+          board,
+          boardUid,
+          process.env.NEXT_PUBLIC_APP_URL
+        )
+      );
       openGameOverModal();
     }
   }, [gameState]);
