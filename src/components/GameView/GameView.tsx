@@ -23,6 +23,7 @@ import {
 } from "../../config/style.const";
 import { useGameState } from "../../hooks/useGameState";
 import { useDeviceKeyboard } from "src/hooks/useDeviceKeyboard";
+import { selectCurrentGuess } from "src/selectors";
 
 /** Time before clipboard "hasCopied" state resets */
 const CLIPBOARD_TIMEOUT_MS = 5000;
@@ -75,17 +76,6 @@ export const GameView: React.FC<GameViewProps> = ({
   React.useEffect(() => {
     resetGame();
   }, [guessLimit, targetWordInfo]);
-
-  const selectCurrentGuess = () => {
-    if (currentGuessCount >= guessLimit) {
-      return "";
-    }
-    const guessRow = board[currentGuessCount];
-    return guessRow
-      .map(({ char }) => char)
-      .join("")
-      .trim();
-  };
 
   const handleAddChar = useCallback(
     (char: string) => {
@@ -172,7 +162,7 @@ export const GameView: React.FC<GameViewProps> = ({
   };
 
   const handleSubmit = () => {
-    const guess = selectCurrentGuess();
+    const guess = selectCurrentGuess({ board, currentGuessCount });
 
     if (guess.length !== targetWordInfo.word.length) {
       toast({
@@ -224,10 +214,13 @@ export const GameView: React.FC<GameViewProps> = ({
     handleAddChar,
     handleBackspace: handleRemoveLastChar,
     handleSubmit,
-    canBackspace: selectCurrentGuess().length > 0 && gameState === "ACTIVE",
+    canBackspace:
+      gameState === "ACTIVE" &&
+      selectCurrentGuess({ board, currentGuessCount }).length > 0,
     canSubmit:
-      selectCurrentGuess().length === targetWordInfo.word.length &&
-      gameState === "ACTIVE",
+      gameState === "ACTIVE" &&
+      selectCurrentGuess({ board, currentGuessCount }).length ===
+        targetWordInfo.word.length,
   });
 
   const handleShareClick = useCallback(() => {
@@ -293,11 +286,13 @@ export const GameView: React.FC<GameViewProps> = ({
         <GameKeyboard
           keyStatusMap={keyStatusMap}
           canBackspace={
-            selectCurrentGuess().length > 0 || gameState !== "ACTIVE"
+            gameState !== "ACTIVE" &&
+            selectCurrentGuess({ board, currentGuessCount }).length > 0
           }
           canSubmit={
-            selectCurrentGuess().length === targetWordInfo.word.length ||
-            gameState !== "ACTIVE"
+            gameState !== "ACTIVE" &&
+            selectCurrentGuess({ board, currentGuessCount }).length ===
+              targetWordInfo.word.length
           }
           handleAddChar={handleAddChar}
           handleBackspace={handleRemoveLastChar}
