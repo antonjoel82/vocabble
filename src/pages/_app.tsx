@@ -4,8 +4,15 @@ import Head from "next/head";
 import theme from "../theme";
 import { AppProps } from "next/app";
 import { APP_NAME, MainLayout } from "../layout/MainLayout";
+import { useEffect } from "react";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/service-worker.js");
+    }
+  }, []);
+
   return (
     <>
       <Head>
