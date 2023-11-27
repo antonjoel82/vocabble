@@ -73,6 +73,7 @@ export const GameView: React.FC<GameViewProps> = ({
     guessLimit,
     targetWordInfo,
     boardUid,
+    updateGameStatusForGuessResults,
   });
 
   const {

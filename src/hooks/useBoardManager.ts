@@ -13,12 +13,17 @@ interface UseBoardManagerProps {
   guessLimit: number;
   targetWordInfo: WordInfo;
   boardUid: string;
+  updateGameStatusForGuessResults: (
+    guessResults: WordleGuessResult[],
+    hasExceededGuessLimit: boolean
+  ) => void;
 }
 
 export const useBoardManager = ({
   guessLimit,
   targetWordInfo,
   boardUid,
+  updateGameStatusForGuessResults,
 }: UseBoardManagerProps) => {
   const [currentGuessIndex, setCurrentGuessIndex] = useState<number>(0);
   const [board, setBoard] = useState<BoardResults>(
@@ -42,6 +47,10 @@ export const useBoardManager = ({
 
     setBoard(savedBoardState);
     setCurrentGuessIndex(derivedGuessIndex);
+    updateGameStatusForGuessResults(
+      savedBoardState[derivedGuessIndex - 1] as WordleGuessResult[],
+      derivedGuessIndex >= guessLimit
+    );
   }, [boardUid, guessLimit, targetWordInfo.word]);
 
   const addCharToBoard = (char: string) => {
