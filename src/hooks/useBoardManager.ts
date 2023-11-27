@@ -32,8 +32,27 @@ export const useBoardManager = ({
     setBoard(updatedBoard);
   };
 
+  const removeLastCharFromBoard = () => {
+    const updatedBoard = produce(board, (draft) => {
+      const rowBeingUpdated = Array.from(draft[currentGuessCount]);
+      const lastCharIndex =
+        rowBeingUpdated.length -
+        1 -
+        rowBeingUpdated.reverse().findIndex(({ char }) => !!char);
+
+      if (lastCharIndex >= targetWordInfo.word.length) {
+        return;
+      }
+
+      draft[currentGuessCount][lastCharIndex] = {};
+    });
+
+    setBoard(updatedBoard);
+  };
+
   return {
     board,
     addCharToBoard,
+    removeLastCharFromBoard,
   };
 };

@@ -68,7 +68,7 @@ export const GameView: React.FC<GameViewProps> = ({
   const { gameStatus, setGameStatus } = useGameStatus();
   const { keyStatusMap, updateKeyboardGuesses, resetKeyboardGuesses } =
     useGameKeyboard();
-  const { addCharToBoard } = useBoardManager({
+  const { addCharToBoard, removeLastCharFromBoard } = useBoardManager({
     guessLimit,
     currentGuessCount,
     targetWordInfo,
@@ -122,21 +122,7 @@ export const GameView: React.FC<GameViewProps> = ({
       return;
     }
 
-    const updatedBoard = produce(board, (draft) => {
-      const rowBeingUpdated = Array.from(draft[currentGuessCount]);
-      const lastCharIndex =
-        rowBeingUpdated.length -
-        1 -
-        rowBeingUpdated.reverse().findIndex(({ char }) => !!char);
-
-      if (lastCharIndex >= targetWordInfo.word.length) {
-        return;
-      }
-
-      draft[currentGuessCount][lastCharIndex] = {};
-    });
-
-    setBoard(updatedBoard);
+    removeLastCharFromBoard();
   };
 
   /**
