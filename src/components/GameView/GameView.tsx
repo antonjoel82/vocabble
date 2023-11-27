@@ -106,7 +106,8 @@ export const GameView: React.FC<GameViewProps> = ({
     }
 
     if (
-      selectCurrentGuess({ board, currentGuessCount }).length === guessLimit
+      selectCurrentGuess({ board, currentGuessCount }).length ===
+      targetWordInfo.word.length
     ) {
       toast({
         title: "Invalid Guess Length",
@@ -125,23 +126,6 @@ export const GameView: React.FC<GameViewProps> = ({
     }
 
     removeLastCharFromBoard();
-  };
-
-  /**
-   * @precondition expects guess to be validated
-   */
-  const submitGuess = (guess: string) => {
-    const updatedGuessCount = currentGuessCount + 1;
-    setCurrentGuessCount(updatedGuessCount);
-
-    const guessResults = evaluateGuess(guess, targetWordInfo.word);
-
-    updateBoardForGuessResults(guessResults);
-    updateKeyboardGuesses(guessResults);
-    updateGameStatusForGuessResults(
-      guessResults,
-      updatedGuessCount >= guessLimit
-    );
   };
 
   const handleSubmit = () => {
@@ -169,21 +153,18 @@ export const GameView: React.FC<GameViewProps> = ({
       return;
     }
 
-    submitGuess(guess);
-  };
+    const updatedGuessCount = currentGuessCount + 1;
+    setCurrentGuessCount(updatedGuessCount);
 
-  useDeviceKeyboard({
-    handleAddChar,
-    handleBackspace: handleRemoveLastChar,
-    handleSubmit,
-    canBackspace:
-      gameStatus === "ACTIVE" &&
-      selectCurrentGuess({ board, currentGuessCount }).length > 0,
-    canSubmit:
-      gameStatus === "ACTIVE" &&
-      selectCurrentGuess({ board, currentGuessCount }).length ===
-        targetWordInfo.word.length,
-  });
+    const guessResults = evaluateGuess(guess, targetWordInfo.word);
+
+    updateBoardForGuessResults(guessResults);
+    updateKeyboardGuesses(guessResults);
+    updateGameStatusForGuessResults(
+      guessResults,
+      updatedGuessCount >= guessLimit
+    );
+  };
 
   React.useEffect(() => {
     if (gameStatus !== "ACTIVE") {

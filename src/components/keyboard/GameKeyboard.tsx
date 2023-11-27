@@ -6,6 +6,7 @@ import { KEYBOARD_CHARS } from "./constants";
 import { KeyboardKeyProps } from "./KeyboardKey";
 import { KeyboardRow } from "./KeyboardRow";
 import { KeyStatusMap } from "./KeyStatusMap";
+import { useDeviceKeyboard } from "src/hooks/useDeviceKeyboard";
 
 export interface GameKeyboardProps extends KeyboardBaseProps {
   keyStatusMap: KeyStatusMap;
@@ -21,6 +22,14 @@ export const GameKeyboard: React.FC<GameKeyboardProps> = ({
   canSubmit,
   canBackspace,
 }) => {
+  useDeviceKeyboard({
+    handleAddChar,
+    handleBackspace,
+    handleSubmit,
+    canBackspace,
+    canSubmit,
+  });
+
   const backspaceKeyConfig: KeyboardKeyProps = {
     label: <FiDelete size="1.5rem" />,
     status: "default",
