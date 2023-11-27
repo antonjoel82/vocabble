@@ -45,6 +45,11 @@ export const useBoardManager = ({
     });
     const derivedGuessIndex = getCurrentGuessIndexFromBoard(savedBoardState);
 
+    // don't setup a board if an incomplete or empty board was saved
+    if (derivedGuessIndex === 0) {
+      return;
+    }
+
     setBoard(savedBoardState);
     setCurrentGuessIndex(derivedGuessIndex);
     updateGameStatusForGuessResults(
