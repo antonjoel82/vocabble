@@ -9,3 +9,4 @@ export * from "./validateChar";
 export * from "./getEmptyBoard";
 export * from "./getDeviceKeyType";
 export * from "./getColorsFromStatus";
+export * from "./getCurrentGuessIndexFromBoard";
