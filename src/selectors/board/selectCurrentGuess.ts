@@ -2,14 +2,14 @@ import { GameStateSelector } from "src/types/GameStateSelector";
 
 export const selectCurrentGuess: GameStateSelector<string> = ({
   board,
-  currentGuessCount,
+  currentGuessIndex,
 }) => {
   // Once the user has exceeded the guess limit, there is no current guess
-  if (currentGuessCount >= board.length) {
+  if (currentGuessIndex >= board.length) {
     return "";
   }
 
-  const guessRow = board[currentGuessCount];
+  const guessRow = board[currentGuessIndex];
   return guessRow
     .map(({ char }) => char)
     .join("")

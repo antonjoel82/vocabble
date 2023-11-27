@@ -1,30 +1,55 @@
 import { produce } from "immer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BoardResults } from "src/components/Board";
 import { WordInfo, WordleGuessResult } from "src/types";
-import { getEmptyBoard } from "src/util";
+import {
+  deserializeBoard,
+  getCurrentGuessIndexFromBoard,
+  getEmptyBoard,
+  serializeBoard,
+} from "src/util";
 
 interface UseBoardManagerProps {
-  currentGuessCount: number;
   guessLimit: number;
   targetWordInfo: WordInfo;
+  boardUid: string;
 }
 
 export const useBoardManager = ({
-  currentGuessCount,
   guessLimit,
   targetWordInfo,
+  boardUid,
 }: UseBoardManagerProps) => {
+  const [currentGuessIndex, setCurrentGuessIndex] = useState<number>(0);
   const [board, setBoard] = useState<BoardResults>(
     getEmptyBoard(guessLimit, targetWordInfo.word.length)
   );
 
+  // Load a saved board state from local storage if one exists
+  useEffect(() => {
+    const serializedBoard = localStorage.getItem(boardUid);
+
+    if (!serializedBoard) {
+      return;
+    }
+
+    const savedBoardState = deserializeBoard({
+      serializedBoard,
+      guessLimit,
+      targetWord: targetWordInfo.word,
+    });
+    const derivedGuessIndex = getCurrentGuessIndexFromBoard(savedBoardState);
+
+    setBoard(savedBoardState);
+    setCurrentGuessIndex(derivedGuessIndex);
+  }, [boardUid, guessLimit, targetWordInfo.word]);
+
   const addCharToBoard = (char: string) => {
-    const rowBeingUpdated = board[currentGuessCount];
+    const rowBeingUpdated = board[currentGuessIndex];
     const emptyIndex = rowBeingUpdated.findIndex((item) => !item.char);
 
     const updatedBoard = produce(board, (draft) => {
-      draft[currentGuessCount][emptyIndex].char = char.toLocaleLowerCase();
+      draft[currentGuessIndex][emptyIndex].char = char.toLocaleLowerCase();
     });
 
     setBoard(updatedBoard);
@@ -32,7 +57,7 @@ export const useBoardManager = ({
 
   const removeLastCharFromBoard = () => {
     const updatedBoard = produce(board, (draft) => {
-      const rowBeingUpdated = Array.from(draft[currentGuessCount]);
+      const rowBeingUpdated = Array.from(draft[currentGuessIndex]);
       const lastCharIndex =
         rowBeingUpdated.length -
         1 -
@@ -42,7 +67,7 @@ export const useBoardManager = ({
         return;
       }
 
-      draft[currentGuessCount][lastCharIndex] = {};
+      draft[currentGuessIndex][lastCharIndex] = {};
     });
 
     setBoard(updatedBoard);
@@ -53,19 +78,28 @@ export const useBoardManager = ({
    */
   const updateBoardForGuessResults = (guessResults: WordleGuessResult[]) => {
     const updatedBoard = produce(board, (draft) => {
-      draft[currentGuessCount] = guessResults;
+      draft[currentGuessIndex] = guessResults;
     });
     setBoard(updatedBoard);
+    setCurrentGuessIndex((prevIndex) => prevIndex + 1);
+
+    // save progress for this puzzle when the board is updated
+    const serializedBoard = serializeBoard(updatedBoard);
+    localStorage.setItem(boardUid, serializedBoard);
   };
 
   const resetBoard = () =>
     setBoard(getEmptyBoard(guessLimit, targetWordInfo.word.length));
 
+  const resetCurrentGuessIndex = () => setCurrentGuessIndex(0);
+
   return {
     board,
+    currentGuessIndex,
     addCharToBoard,
     removeLastCharFromBoard,
     updateBoardForGuessResults,
     resetBoard,
+    resetCurrentGuessIndex,
   };
 };

@@ -26,7 +26,6 @@ import {
   SIDEBAR_WIDTH_CHAKRA,
 } from "../../config/style.const";
 import { useGameStatus } from "../../hooks/useGameStatus";
-import { useDeviceKeyboard } from "src/hooks/useDeviceKeyboard";
 import { selectCurrentGuess } from "src/selectors";
 import { useBoardManager } from "src/hooks/useBoardManager";
 
@@ -58,22 +57,22 @@ export const GameView: React.FC<GameViewProps> = ({
     onOpen: openGameOverModal,
   } = useDisclosure();
 
-  const [currentGuessCount, setCurrentGuessCount] = React.useState<number>(0);
-
   const { gameStatus, resetGameStatus, updateGameStatusForGuessResults } =
     useGameStatus();
   const { keyStatusMap, updateKeyboardGuesses, resetKeyboardGuesses } =
     useGameKeyboard();
   const {
     board,
+    currentGuessIndex,
     addCharToBoard,
     removeLastCharFromBoard,
     updateBoardForGuessResults,
     resetBoard,
+    resetCurrentGuessIndex,
   } = useBoardManager({
     guessLimit,
-    currentGuessCount,
     targetWordInfo,
+    boardUid,
   });
 
   const {
@@ -85,14 +84,10 @@ export const GameView: React.FC<GameViewProps> = ({
   });
 
   const resetGame = useCallback(() => {
-    setCurrentGuessCount(0);
+    resetCurrentGuessIndex();
     resetGameStatus();
     resetBoard();
     resetKeyboardGuesses();
-  }, [guessLimit, targetWordInfo]);
-
-  React.useEffect(() => {
-    resetGame();
   }, [guessLimit, targetWordInfo]);
 
   const handleAddChar = (char: string) => {
@@ -106,7 +101,7 @@ export const GameView: React.FC<GameViewProps> = ({
     }
 
     if (
-      selectCurrentGuess({ board, currentGuessCount }).length ===
+      selectCurrentGuess({ board, currentGuessIndex }).length ===
       targetWordInfo.word.length
     ) {
       toast({
@@ -133,7 +128,7 @@ export const GameView: React.FC<GameViewProps> = ({
       return;
     }
 
-    const guess = selectCurrentGuess({ board, currentGuessCount });
+    const guess = selectCurrentGuess({ board, currentGuessIndex });
 
     if (guess.length !== targetWordInfo.word.length) {
       toast({
@@ -153,16 +148,13 @@ export const GameView: React.FC<GameViewProps> = ({
       return;
     }
 
-    const updatedGuessCount = currentGuessCount + 1;
-    setCurrentGuessCount(updatedGuessCount);
-
     const guessResults = evaluateGuess(guess, targetWordInfo.word);
 
     updateBoardForGuessResults(guessResults);
     updateKeyboardGuesses(guessResults);
     updateGameStatusForGuessResults(
       guessResults,
-      updatedGuessCount >= guessLimit
+      currentGuessIndex + 1 >= guessLimit
     );
   };
 
@@ -240,11 +232,11 @@ export const GameView: React.FC<GameViewProps> = ({
           keyStatusMap={keyStatusMap}
           canBackspace={
             gameStatus === "ACTIVE" &&
-            selectCurrentGuess({ board, currentGuessCount }).length > 0
+            selectCurrentGuess({ board, currentGuessIndex }).length > 0
           }
           canSubmit={
             gameStatus === "ACTIVE" &&
-            selectCurrentGuess({ board, currentGuessCount }).length ===
+            selectCurrentGuess({ board, currentGuessIndex }).length ===
               targetWordInfo.word.length
           }
           areAllDisabled={gameStatus !== "ACTIVE"}
