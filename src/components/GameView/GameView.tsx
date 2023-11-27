@@ -60,7 +60,8 @@ export const GameView: React.FC<GameViewProps> = ({
 
   const [currentGuessCount, setCurrentGuessCount] = React.useState<number>(0);
 
-  const { gameStatus, setGameStatus } = useGameStatus();
+  const { gameStatus, resetGameStatus, updateGameStatusForGuessResults } =
+    useGameStatus();
   const { keyStatusMap, updateKeyboardGuesses, resetKeyboardGuesses } =
     useGameKeyboard();
   const {
@@ -85,7 +86,7 @@ export const GameView: React.FC<GameViewProps> = ({
 
   const resetGame = useCallback(() => {
     setCurrentGuessCount(0);
-    setGameStatus("ACTIVE");
+    resetGameStatus();
     resetBoard();
     resetKeyboardGuesses();
   }, [guessLimit, targetWordInfo]);
@@ -130,18 +131,17 @@ export const GameView: React.FC<GameViewProps> = ({
    * @precondition expects guess to be validated
    */
   const submitGuess = (guess: string) => {
+    const updatedGuessCount = currentGuessCount + 1;
+    setCurrentGuessCount(updatedGuessCount);
+
     const guessResults = evaluateGuess(guess, targetWordInfo.word);
 
     updateBoardForGuessResults(guessResults);
     updateKeyboardGuesses(guessResults);
-
-    const updatedGuessCount = currentGuessCount + 1;
-    setCurrentGuessCount(updatedGuessCount);
-    if (guessResults.every(({ status }) => status === "CORRECT")) {
-      setGameStatus("WON");
-    } else if (updatedGuessCount >= guessLimit) {
-      setGameStatus("LOST");
-    }
+    updateGameStatusForGuessResults(
+      guessResults,
+      updatedGuessCount >= guessLimit
+    );
   };
 
   const handleSubmit = () => {
@@ -172,19 +172,6 @@ export const GameView: React.FC<GameViewProps> = ({
     submitGuess(guess);
   };
 
-  React.useEffect(() => {
-    if (gameStatus !== "ACTIVE") {
-      setClipboardValue(
-        convertGameResultToString(
-          board,
-          boardUid,
-          process.env.NEXT_PUBLIC_APP_URL
-        )
-      );
-      openGameOverModal();
-    }
-  }, [gameStatus]);
-
   useDeviceKeyboard({
     handleAddChar,
     handleBackspace: handleRemoveLastChar,
@@ -197,6 +184,19 @@ export const GameView: React.FC<GameViewProps> = ({
       selectCurrentGuess({ board, currentGuessCount }).length ===
         targetWordInfo.word.length,
   });
+
+  React.useEffect(() => {
+    if (gameStatus !== "ACTIVE") {
+      setClipboardValue(
+        convertGameResultToString(
+          board,
+          boardUid,
+          process.env.NEXT_PUBLIC_APP_URL
+        )
+      );
+      openGameOverModal();
+    }
+  }, [gameStatus]);
 
   const handleShareClick = useCallback(() => {
     onCopy();
