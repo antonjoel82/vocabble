@@ -6,10 +6,11 @@ export const LOSS_LABELS: string[] = [
   "Well at least you're good at other things... Right?",
   "Better luck next time ¯\\_(ツ)_/¯",
   "Yikes...👁👄👁",
-  "Even if you could dodge a wrench, then you still couldn't dodge this word.",
+  "Even if you could dodge a wrench, you still couldn't dodge this word.",
   "Don't worry, I won't tell your middle school English teacher.",
   "I'm sure your mom will still accept you.",
   "Oopsy daisy!",
+  "Uh-oh, SpaghettiOs!",
 ];
 
 export const WIN_LABELS: string[] = [
@@ -22,4 +23,6 @@ export const WIN_LABELS: string[] = [
   "Winner, winner, chicken dinner! 🍗",
   "You're my boy, blue!",
   "🎶We are the champions! We are the champions!🎶",
+  "You make mom and dad so proud!",
+  "Way to prove the haters wrong!",
 ];
