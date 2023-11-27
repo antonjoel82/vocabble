@@ -30,6 +30,7 @@ import {
 import { useGameStatus } from "../../hooks/useGameStatus";
 import { useDeviceKeyboard } from "src/hooks/useDeviceKeyboard";
 import { selectCurrentGuess } from "src/selectors";
+import { useBoardManager } from "src/hooks/useBoardManager";
 
 /** Time before clipboard "hasCopied" state resets */
 const CLIPBOARD_TIMEOUT_MS = 5000;
@@ -53,21 +54,25 @@ export const GameView: React.FC<GameViewProps> = ({
 }) => {
   const toast = useToast(DEFAULT_TOAST_SETTINGS);
   const router = useRouter();
-
-  const [currentGuessCount, setCurrentGuessCount] = React.useState<number>(0);
-  const [board, setBoard] = React.useState<BoardResults>(
-    getEmptyBoard(guessLimit, targetWordInfo.word.length)
-  );
-  const { gameStatus, setGameStatus } = useGameStatus();
-
-  const { keyStatusMap, updateKeyboardGuesses, resetKeyboardGuesses } =
-    useGameKeyboard();
-
   const {
     isOpen: isGameOverModalOpen,
     onClose: closeGameOverModal,
     onOpen: openGameOverModal,
   } = useDisclosure();
+
+  const [currentGuessCount, setCurrentGuessCount] = React.useState<number>(0);
+  const [board, setBoard] = React.useState<BoardResults>(
+    getEmptyBoard(guessLimit, targetWordInfo.word.length)
+  );
+
+  const { gameStatus, setGameStatus } = useGameStatus();
+  const { keyStatusMap, updateKeyboardGuesses, resetKeyboardGuesses } =
+    useGameKeyboard();
+  const { addCharToBoard } = useBoardManager({
+    guessLimit,
+    currentGuessCount,
+    targetWordInfo,
+  });
 
   const {
     onCopy,
@@ -88,36 +93,29 @@ export const GameView: React.FC<GameViewProps> = ({
     resetGame();
   }, [guessLimit, targetWordInfo]);
 
-  const handleAddChar = useCallback(
-    (char: string) => {
-      if (gameStatus !== "ACTIVE") {
-        return;
-      }
+  const handleAddChar = (char: string) => {
+    if (gameStatus !== "ACTIVE") {
+      return;
+    }
 
-      if (!validateChar(char)) {
-        console.warn("Illegal character typed!");
-        return;
-      }
+    // ensure only legal characters are added
+    if (!validateChar(char)) {
+      return;
+    }
 
-      const rowBeingUpdated = board[currentGuessCount];
-      const emptyIndex = rowBeingUpdated.findIndex((item) => !item.char);
-
-      if (emptyIndex === -1 || emptyIndex >= targetWordInfo.word.length) {
-        toast({
-          title: "Invalid Guess Length",
-          description: `You cannot guess more than ${targetWordInfo.word.length} characters.`,
-          status: "warning",
-        });
-        return;
-      }
-      const updatedBoard = produce(board, (draft) => {
-        draft[currentGuessCount][emptyIndex].char = char.toLocaleLowerCase();
+    if (
+      selectCurrentGuess({ board, currentGuessCount }).length === guessLimit
+    ) {
+      toast({
+        title: "Invalid Guess Length",
+        description: `You cannot guess more than ${targetWordInfo.word.length} characters.`,
+        status: "warning",
       });
+      return;
+    }
 
-      setBoard(updatedBoard);
-    },
-    [board, currentGuessCount, setBoard]
-  );
+    addCharToBoard(char);
+  };
 
   const handleRemoveLastChar = () => {
     if (gameStatus !== "ACTIVE") {
@@ -273,7 +271,7 @@ export const GameView: React.FC<GameViewProps> = ({
         bottom="0"
         width="100%"
         py={3}
-        // needs offset for open menu
+        // needs offset for open sidebar menu
         pr={{ base: 0, md: SIDEBAR_WIDTH_CHAKRA }}
       >
         <GameKeyboard
