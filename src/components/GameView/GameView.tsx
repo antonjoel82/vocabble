@@ -1,8 +1,7 @@
 import * as React from "react";
-import { Board, BoardResults } from "../Board";
+import { Board } from "../Board";
 import { Container } from "../Container";
 import { GameKeyboard, useGameKeyboard } from "../keyboard";
-import { produce } from "immer";
 import {
   Box,
   UseToastOptions,
@@ -13,7 +12,6 @@ import {
 import {
   convertGameResultToString,
   evaluateGuess,
-  getEmptyBoard,
   validateChar,
 } from "../../util";
 import { GameOverModal } from "../GameOverModal";
@@ -61,14 +59,17 @@ export const GameView: React.FC<GameViewProps> = ({
   } = useDisclosure();
 
   const [currentGuessCount, setCurrentGuessCount] = React.useState<number>(0);
-  const [board, setBoard] = React.useState<BoardResults>(
-    getEmptyBoard(guessLimit, targetWordInfo.word.length)
-  );
 
   const { gameStatus, setGameStatus } = useGameStatus();
   const { keyStatusMap, updateKeyboardGuesses, resetKeyboardGuesses } =
     useGameKeyboard();
-  const { addCharToBoard, removeLastCharFromBoard } = useBoardManager({
+  const {
+    board,
+    addCharToBoard,
+    removeLastCharFromBoard,
+    updateBoardForGuessResults,
+    resetBoard,
+  } = useBoardManager({
     guessLimit,
     currentGuessCount,
     targetWordInfo,
@@ -85,7 +86,7 @@ export const GameView: React.FC<GameViewProps> = ({
   const resetGame = useCallback(() => {
     setCurrentGuessCount(0);
     setGameStatus("ACTIVE");
-    setBoard(getEmptyBoard(guessLimit, targetWordInfo.word.length));
+    resetBoard();
     resetKeyboardGuesses();
   }, [guessLimit, targetWordInfo]);
 
@@ -131,13 +132,7 @@ export const GameView: React.FC<GameViewProps> = ({
   const submitGuess = (guess: string) => {
     const guessResults = evaluateGuess(guess, targetWordInfo.word);
 
-    // Update the board state
-    const updatedBoard = produce(board, (draft) => {
-      draft[currentGuessCount] = guessResults;
-    });
-    setBoard(updatedBoard);
-
-    // Update keyboard keys with the latest guess
+    updateBoardForGuessResults(guessResults);
     updateKeyboardGuesses(guessResults);
 
     const updatedGuessCount = currentGuessCount + 1;

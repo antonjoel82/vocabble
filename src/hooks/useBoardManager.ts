@@ -1,10 +1,8 @@
 import { produce } from "immer";
-import { useCallback, useState } from "react";
-import { validateWordInDictionary } from "src/api";
+import { useState } from "react";
 import { BoardResults } from "src/components/Board";
-import { selectCurrentGuess } from "src/selectors";
-import { WordInfo } from "src/types";
-import { validateChar, evaluateGuess, getEmptyBoard } from "src/util";
+import { WordInfo, WordleGuessResult } from "src/types";
+import { getEmptyBoard } from "src/util";
 
 interface UseBoardManagerProps {
   currentGuessCount: number;
@@ -50,9 +48,24 @@ export const useBoardManager = ({
     setBoard(updatedBoard);
   };
 
+  /**
+   * @precondition expects guess to be validated
+   */
+  const updateBoardForGuessResults = (guessResults: WordleGuessResult[]) => {
+    const updatedBoard = produce(board, (draft) => {
+      draft[currentGuessCount] = guessResults;
+    });
+    setBoard(updatedBoard);
+  };
+
+  const resetBoard = () =>
+    setBoard(getEmptyBoard(guessLimit, targetWordInfo.word.length));
+
   return {
     board,
     addCharToBoard,
     removeLastCharFromBoard,
+    updateBoardForGuessResults,
+    resetBoard,
   };
 };
