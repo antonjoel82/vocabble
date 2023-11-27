@@ -14,7 +14,7 @@ describe("deserializeBoard", () => {
     expect(
       deserializeBoard({
         serializedBoard: "jaded\njaded\njaded\njaded\njaded\njaded",
-        numGuesses: 6,
+        guessLimit: 6,
         targetWord: "laden",
       })
     ).toEqual(FULL_BOARD);
@@ -30,7 +30,7 @@ describe("deserializeBoard", () => {
     expect(
       deserializeBoard({
         serializedBoard: "jaded\njaded\njaded\nhel",
-        numGuesses: 6,
+        guessLimit: 6,
         targetWord: "laden",
       })
     ).toEqual(board);

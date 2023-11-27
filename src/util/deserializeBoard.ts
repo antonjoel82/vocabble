@@ -9,7 +9,7 @@ interface LineDeserializationParams {
 interface BoardDeserializationParams {
   targetWord: string;
   serializedBoard: string;
-  numGuesses: number;
+  guessLimit: number;
 }
 
 const deserializeLine = ({
@@ -29,7 +29,7 @@ const createEmptyRow = (wordLength: number): BoardResults[0] =>
 
 export const deserializeBoard = ({
   serializedBoard,
-  numGuesses,
+  guessLimit,
   targetWord,
 }: BoardDeserializationParams): BoardResults => {
   const wordLength = targetWord.length;
@@ -41,14 +41,14 @@ export const deserializeBoard = ({
         : deserializeLine({ line, wordLength })
     );
 
-  // Can return board as is if it has numGuesses rows
-  if (maybePartialBoard.length === numGuesses) {
+  // Can return board as is if it has guessLimit rows
+  if (maybePartialBoard.length === guessLimit) {
     return maybePartialBoard;
   }
 
   // fill the remaining board with empty rows
   return maybePartialBoard.concat(
-    Array(numGuesses - maybePartialBoard.length).fill(
+    Array(guessLimit - maybePartialBoard.length).fill(
       createEmptyRow(wordLength)
     )
   );
