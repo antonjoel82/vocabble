@@ -39,8 +39,9 @@ export const GameOverModal: React.FC<GameOverModalProps> = React.memo(
       React.useState(false);
     const handleToggle = () => setShouldShowDefinition((show) => !show);
 
-    const gameOverMessage = getRandomStringFromList(
-      isWin ? WIN_LABELS : LOSS_LABELS
+    const gameOverMessage = useMemo(
+      () => getRandomStringFromList(isWin ? WIN_LABELS : LOSS_LABELS),
+      [targetWordInfo.word, isWin]
     );
 
     return (
