@@ -225,7 +225,8 @@ export const GameView: React.FC<GameViewProps> = ({
         position="fixed"
         bottom="0"
         width="100%"
-        py={3}
+        py={4}
+        pb={{ base: 5, md: 4 }}
         // needs offset for open sidebar menu
         pr={{ base: 0, md: SIDEBAR_WIDTH_CHAKRA }}
       >
