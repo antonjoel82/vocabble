@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 
 export interface NumberStepperProps extends NumberInputProps {
-  handleChange: (val: number) => void;
+  handleChange?: (val: number) => void;
 }
 
 export const NumberStepper: FC<NumberStepperProps> = ({
@@ -20,7 +20,9 @@ export const NumberStepper: FC<NumberStepperProps> = ({
     <NumberInput
       clampValueOnBlur
       {...inputProps}
-      onChange={(_, val) => handleChange(val)}
+      onChange={(_, val) => handleChange?.(val)}
+      backgroundColor={"white"}
+      maxWidth={20}
     >
       <NumberInputField />
       <NumberInputStepper>

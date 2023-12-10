@@ -9,6 +9,7 @@ import { SIDEBAR_WIDTH_CHAKRA } from "src/config/style.const";
 
 const LINK_ITEMS: NavLinkData[] = [
   { label: "Home", icon: FiHome, href: "/" },
+  { label: "Custom Board", icon: FiSettings, href: "/custom" },
   { label: "Standard Game", icon: FiThumbsUp, href: "/standard" },
   // { label: "Settings", icon: FiSettings, href: "/settings" },
 ];
